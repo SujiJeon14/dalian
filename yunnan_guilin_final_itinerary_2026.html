@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>2026 윈난·구이린·양숴 최종 여행 플랜</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  height:100%;
+  font-family:'Noto Sans KR',sans-serif;
+  background:#1a0f00;
+  color:#e2e8f0;
+  overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+
+/* Swipe Container */
+.swipe-wrap{
+  display:flex;
+  width:100%;height:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.swipe-wrap::-webkit-scrollbar{display:none}
+
+.page{
+  flex:0 0 100%;
+  width:100%;height:100%;
+  scroll-snap-align:start;
+  overflow-y:auto;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Dot Indicator */
+.dots{
+  position:fixed;
+  bottom:16px;left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:8px;
+  z-index:100;
+  background:rgba(26,15,0,0.7);
+  backdrop-filter:blur(10px);
+  padding:8px 16px;
+  border-radius:20px;
+}
+.dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  transition:all .3s;
+  cursor:pointer;
+}
+.dot.active{
+  background:white;
+  width:24px;
+  border-radius:4px;
+}
+
+/* Swipe Hint */
+.swipe-hint{
+  position:fixed;
+  bottom:52px;left:50%;
+  transform:translateX(-50%);
+  font-size:12px;
+  color:rgba(255,255,255,0.4);
+  z-index:100;
+  animation:fadeOut 3s forwards;
+  animation-delay:2s;
+}
+@keyframes fadeOut{to{opacity:0;pointer-events:none}}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0.8);
+  background:rgba(217,119,6,0.95);
+  color:white;
+  padding:12px 28px;
+  border-radius:12px;
+  font-size:14px;font-weight:600;
+  z-index:999;
+  opacity:0;
+  transition:all .3s;
+  pointer-events:none;
+}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* Page Backgrounds */
+.page-cover{background:linear-gradient(135deg,#92400e 0%,#b45309 40%,#d97706 100%)}
+.page-kunming{background:linear-gradient(180deg,#4a2c17 0%,#1a0f00 30%)}
+.page-dali{background:linear-gradient(180deg,#2d3a1b 0%,#1a0f00 30%)}
+.page-lijiang{background:linear-gradient(180deg,#1b2d4a 0%,#1a0f00 30%)}
+.page-split{background:linear-gradient(180deg,#4a1b2d 0%,#1a0f00 30%)}
+.page-guilin{background:linear-gradient(180deg,#1b3a2d 0%,#1a0f00 30%)}
+.page-yangshuo{background:linear-gradient(180deg,#2d1b4a 0%,#1a0f00 30%)}
+.page-return{background:linear-gradient(180deg,#3a2d1b 0%,#1a0f00 30%)}
+.page-tips{background:linear-gradient(180deg,#3b1f1f 0%,#1a0f00 30%)}
+.page-budget{background:linear-gradient(180deg,#1f2b3b 0%,#1a0f00 30%)}
+body.light .page-budget{background:linear-gradient(180deg,#dbeafe40 0%,#f5f0eb 30%)}
+
+/* Budget */
+.budget-page{padding:32px 16px 80px}
+.budget-page h2{font-size:22px;font-weight:800;text-align:center;margin-bottom:16px}
+.budget-table{width:100%;border-collapse:separate;border-spacing:0 5px}
+.budget-table tr{background:rgba(255,255,255,0.06)}
+.budget-table td{padding:12px 14px;font-size:13px}
+.budget-table tr td:first-child{border-radius:10px 0 0 10px;font-weight:500}
+.budget-table tr td:nth-child(2){text-align:center;color:#94a3b8;font-size:12px}
+.budget-table tr td:last-child{border-radius:0 10px 10px 0;text-align:right;font-weight:700;color:#f59e0b}
+.budget-table tr.total{background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3)}
+.budget-table tr.total td{font-size:15px;font-weight:800;color:#fbbf24}
+.budget-table tr.total td:last-child{color:#f59e0b}
+.budget-note{margin-top:14px;padding:12px 14px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);border-radius:12px;font-size:12px;color:#fbbf24;line-height:1.6}
+body.light .budget-table tr{background:rgba(0,0,0,0.03)}
+body.light .budget-table td{color:#1a1a1a}
+body.light .budget-table tr td:last-child{color:#b45309}
+body.light .budget-table tr.total{background:rgba(217,119,6,0.1);border-color:rgba(217,119,6,0.3)}
+body.light .budget-table tr.total td{color:#92400e}
+body.light .budget-note{background:rgba(217,119,6,0.06);border-color:rgba(217,119,6,0.15);color:#92400e}
+
+/* Cover Page */
+.cover{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  height:100%;padding:40px 24px 80px;
+  text-align:center;
+}
+.cover-icon{font-size:64px;margin-bottom:16px}
+.cover h1{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px}
+.cover .sub{font-size:14px;opacity:0.8;font-weight:300;margin-bottom:24px}
+.cover-info{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:12px;width:100%;max-width:360px;margin-bottom:20px;
+}
+.cover-card{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:14px;padding:14px 12px;
+}
+.cover-card .cc-icon{font-size:22px}
+.cover-card .cc-label{font-size:11px;opacity:0.6;margin-top:4px}
+.cover-card .cc-value{font-size:13px;font-weight:600;margin-top:2px}
+
+.flight-summary{
+  width:100%;max-width:360px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;padding:16px;margin-bottom:8px;
+}
+.fs-label{font-size:11px;opacity:0.5;margin-bottom:10px;font-weight:500}
+.fs-route{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.fs-point{text-align:center}
+.fs-point .code{font-size:18px;font-weight:700}
+.fs-point .name{font-size:11px;opacity:0.6}
+.fs-mid{flex:1;text-align:center;padding:0 8px}
+.fs-mid .dur{font-size:11px;opacity:0.6}
+.fs-mid .line{height:1px;background:rgba(255,255,255,0.2);margin:4px 0;position:relative}
+.fs-mid .line::after{content:'✈';position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:14px}
+.fs-mid .info{font-size:10px;opacity:0.4}
+
+/* Route Map on Cover */
+.cover-map{
+  width:100%;max-width:360px;
+  height:160px;
+  border-radius:14px;
+  margin-top:12px;
+  border:1px solid rgba(255,255,255,0.12);
+  overflow:hidden;
+}
+
+/* Day Pages */
+.day-page{padding:0 0 80px}
+.day-hero{
+  padding:32px 20px 20px;
+  text-align:center;
+}
+.day-num{font-size:13px;font-weight:700;letter-spacing:2px;opacity:0.6;text-transform:uppercase}
+.day-title{font-size:26px;font-weight:800;margin:4px 0}
+.day-date{font-size:13px;opacity:0.6}
+.day-hotel-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:12px;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;padding:6px 16px;
+  font-size:12px;
+}
+
+.timeline{padding:0 16px}
+
+/* Day Map */
+.day-map{height:200px;border-radius:14px;margin:0 16px 16px;z-index:1;border:1px solid rgba(255,255,255,0.08);overflow:hidden}
+
+/* Schedule Item */
+.sched{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:8px;
+}
+.sched-top{display:flex;align-items:flex-start;gap:12px}
+.sched-icon{
+  width:38px;height:38px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.sched-icon.food{background:rgba(239,68,68,0.15)}
+.sched-icon.spot{background:rgba(59,130,246,0.15)}
+.sched-icon.hotel{background:rgba(16,185,129,0.15)}
+.sched-icon.move{background:rgba(234,179,8,0.15)}
+.sched-icon.shop{background:rgba(168,85,247,0.15)}
+.sched-icon.flight{background:rgba(14,165,233,0.15)}
+.sched-icon.massage{background:rgba(236,72,153,0.15)}
+.sched-icon.hike{background:rgba(234,88,12,0.15)}
+
+.sched-body{flex:1;min-width:0}
+.sched-time{font-size:12px;color:#f59e0b;font-weight:600}
+.sched-title{font-size:15px;font-weight:600;margin-top:2px;line-height:1.4}
+.sched-desc{font-size:13px;color:#94a3b8;margin-top:3px;line-height:1.5}
+.sched-fee{font-size:12px;color:#34d399;margin-top:4px;font-weight:500}
+
+/* Chinese Name (copyable) */
+.cn-name{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(251,191,36,0.1);
+  border:1px solid rgba(251,191,36,0.2);
+  border-radius:8px;
+  padding:4px 10px;
+  margin-top:8px;
+  cursor:pointer;
+  transition:all .2s;
+  user-select:text;
+}
+.cn-name:active{background:rgba(251,191,36,0.25);transform:scale(0.97)}
+.cn-name .cn-text{font-size:13px;color:#fbbf24;font-weight:500}
+.cn-name .cn-copy{font-size:11px;opacity:0.5}
+
+/* Tag */
+.sched-tag{
+  display:inline-block;
+  font-size:10px;font-weight:600;
+  padding:2px 8px;border-radius:6px;
+  margin-top:8px;margin-right:4px;
+}
+.tag-food{background:rgba(239,68,68,0.15);color:#f87171}
+.tag-spot{background:rgba(59,130,246,0.15);color:#60a5fa}
+.tag-hotel{background:rgba(16,185,129,0.15);color:#34d399}
+.tag-move{background:rgba(234,179,8,0.15);color:#fbbf24}
+.tag-shop{background:rgba(168,85,247,0.15);color:#a78bfa}
+.tag-fee{background:rgba(16,185,129,0.12);color:#34d399}
+.tag-train{background:rgba(14,165,233,0.15);color:#38bdf8}
+.tag-hike{background:rgba(234,88,12,0.15);color:#fb923c}
+.tag-warn{background:rgba(239,68,68,0.15);color:#f87171}
+.tag-must{background:rgba(245,158,11,0.2);color:#fbbf24}
+
+/* Transit Card */
+.transit{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 16px;
+  margin:0 0 8px;
+  position:relative;
+}
+.transit::before{
+  content:'';
+  position:absolute;
+  left:34px;top:0;bottom:0;
+  width:2px;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,0.1) 0 4px,transparent 4px 8px);
+}
+.transit-icon{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;z-index:1;flex-shrink:0;
+}
+.transit-info{
+  font-size:12px;color:#64748b;
+  display:flex;align-items:center;gap:6px;
+  flex-wrap:wrap;
+}
+.transit-info .t-dur{color:#94a3b8;font-weight:600}
+
+/* Section Divider between days */
+.section-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  margin:20px 16px;
+}
+.section-day-label{
+  text-align:center;
+  font-size:14px;
+  font-weight:700;
+  color:#f59e0b;
+  margin:16px 0 12px;
+  letter-spacing:1px;
+}
+
+/* Timeline style (for split day) */
+.tl-wrap{padding:0 20px}
+.tl-item{
+  display:flex;gap:16px;
+  padding:12px 0;
+  border-left:2px solid rgba(255,255,255,0.1);
+  margin-left:8px;
+  padding-left:20px;
+  position:relative;
+}
+.tl-item::before{
+  content:'';
+  position:absolute;
+  left:-5px;top:18px;
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#f59e0b;
+}
+.tl-item.highlight::before{background:#ef4444;width:10px;height:10px;left:-6px}
+.tl-time{
+  font-size:13px;font-weight:700;
+  color:#f59e0b;
+  min-width:50px;
+  flex-shrink:0;
+}
+.tl-content{flex:1}
+.tl-title{font-size:14px;font-weight:600;margin-bottom:2px}
+.tl-desc{font-size:12px;color:#94a3b8}
+
+/* Tips Page */
+.tips-page{padding:32px 16px 80px}
+.tips-page h2{font-size:24px;font-weight:800;text-align:center;margin-bottom:20px}
+
+.tip-section{margin-bottom:20px}
+.tip-section h3{
+  font-size:14px;font-weight:700;
+  color:#f59e0b;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.tip-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:14px 16px;
+  margin-bottom:8px;
+}
+.tip-card .tip-title{font-size:14px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.tip-card .tip-text{font-size:13px;color:#94a3b8;line-height:1.6}
+
+.checklist{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:16px;
+}
+.checklist label{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;padding:7px 0;
+  cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.checklist label:last-child{border-bottom:none}
+.checklist input[type="checkbox"]{
+  width:20px;height:20px;
+  accent-color:#d97706;
+  flex-shrink:0;
+}
+
+.sched-title a{
+  color:inherit;
+  text-decoration:underline;
+  text-decoration-color:rgba(245,158,11,0.4);
+  text-underline-offset:3px;
+  transition:text-decoration-color .2s;
+}
+.sched-title a:active{text-decoration-color:rgba(245,158,11,0.8)}
+
+/* Warning box */
+.warn-box{
+  background:rgba(239,68,68,0.08);
+  border:1px solid rgba(239,68,68,0.2);
+  border-radius:12px;
+  padding:12px 14px;
+  margin:8px 16px 16px;
+  font-size:13px;
+  line-height:1.6;
+  color:#fca5a5;
+}
+.warn-box b{color:#f87171}
+
+/* Info box */
+.info-box{
+  background:rgba(59,130,246,0.08);
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:12px;
+  padding:12px 14px;
+  margin:8px 16px 16px;
+  font-size:13px;
+  line-height:1.6;
+  color:#93c5fd;
+}
+.info-box b{color:#60a5fa}
+
+/* Notice box */
+.notice-box{
+  background:rgba(251,191,36,0.08);
+  border:1px solid rgba(251,191,36,0.2);
+  border-radius:12px;
+  padding:12px 14px;
+  margin:8px 16px 16px;
+  font-size:13px;
+  line-height:1.6;
+  color:#fde68a;
+}
+.notice-box b{color:#fbbf24}
+
+/* Leaflet overrides */
+.leaflet-tile-pane{filter:brightness(0.7) contrast(1.1) saturate(0.8)}
+body.light .leaflet-tile-pane{filter:none}
+
+/* Theme Toggle */
+.theme-toggle{
+  position:fixed;top:16px;right:16px;z-index:200;
+  width:40px;height:40px;border-radius:50%;border:none;
+  background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);
+  font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+}
+.theme-toggle:active{transform:scale(0.9)}
+
+/* Light Theme Overrides */
+body.light{background:#f5f0eb;color:#1a1a1a}
+body.light .dots{background:rgba(245,240,235,0.8)}
+body.light .dot{background:rgba(0,0,0,0.2)}
+body.light .dot.active{background:#1a1a1a}
+body.light .toast{background:rgba(217,119,6,0.95)}
+body.light .theme-toggle{background:rgba(0,0,0,0.1)}
+body.light .page-cover{background:linear-gradient(135deg,#f59e0b 0%,#fbbf24 40%,#fcd34d 100%);color:#1a1a1a}
+body.light .page-kunming{background:linear-gradient(180deg,#fef3c7 0%,#f5f0eb 30%)}
+body.light .page-dali{background:linear-gradient(180deg,#d9f99d40 0%,#f5f0eb 30%)}
+body.light .page-lijiang{background:linear-gradient(180deg,#bfdbfe40 0%,#f5f0eb 30%)}
+body.light .page-split{background:linear-gradient(180deg,#fecdd340 0%,#f5f0eb 30%)}
+body.light .page-guilin{background:linear-gradient(180deg,#bbf7d040 0%,#f5f0eb 30%)}
+body.light .page-yangshuo{background:linear-gradient(180deg,#e9d5ff40 0%,#f5f0eb 30%)}
+body.light .page-return{background:linear-gradient(180deg,#fed7aa40 0%,#f5f0eb 30%)}
+body.light .page-tips{background:linear-gradient(180deg,#fecaca40 0%,#f5f0eb 30%)}
+body.light .sched{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.08)}
+body.light .sched-time{color:#b45309}
+body.light .sched-desc{color:#64748b}
+body.light .sched-fee{color:#059669}
+body.light .transit{color:#64748b}
+body.light .transit::before{background:repeating-linear-gradient(180deg,rgba(0,0,0,0.1) 0 4px,transparent 4px 8px)}
+body.light .transit-icon{background:rgba(0,0,0,0.05)}
+body.light .cn-name{background:rgba(217,119,6,0.08);border-color:rgba(217,119,6,0.2)}
+body.light .cn-name .cn-text{color:#b45309}
+body.light .cover-card{background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.1)}
+body.light .flight-summary{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.1)}
+body.light .cover-map{border-color:rgba(0,0,0,0.1)}
+body.light .day-map{border-color:rgba(0,0,0,0.1)}
+body.light .day-hotel-badge{background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.08)}
+body.light .section-divider{background:linear-gradient(90deg,transparent,rgba(0,0,0,0.1),transparent)}
+body.light .section-day-label{color:#92400e}
+body.light .checklist label{border-color:rgba(0,0,0,0.06)}
+body.light .tip-card{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.08)}
+body.light .swipe-hint{color:rgba(0,0,0,0.3)}
+body.light .warn-box{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.15);color:#991b1b}
+body.light .warn-box b{color:#dc2626}
+body.light .info-box{background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.15);color:#1e40af}
+body.light .info-box b{color:#2563eb}
+body.light .notice-box{background:rgba(251,191,36,0.06);border-color:rgba(251,191,36,0.15);color:#92400e}
+body.light .notice-box b{color:#b45309}
+
+@media(min-width:600px){
+  .swipe-wrap{max-width:480px;margin:0 auto}
+  .dots{bottom:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast">복사됨!</div>
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+
+<!-- Dot Indicator -->
+<div class="dots" id="dots"></div>
+<div class="swipe-hint">← 스와이프하여 일정 보기 →</div>
+
+<!-- SWIPE CONTAINER -->
+<div class="swipe-wrap" id="swipeWrap">
+
+<!-- ══════ PAGE 0: COVER ══════ -->
+<div class="page page-cover">
+  <div class="cover">
+    <div class="cover-icon">🏔️</div>
+    <h1>윈난 · 구이린 · 양숴</h1>
+    <p class="sub">2026. 11. 07 (토) — 11. 21 (토) · 14박 15일</p>
+
+    <div class="cover-info">
+      <div class="cover-card">
+        <div class="cc-icon">🗺️</div>
+        <div class="cc-label">경로</div>
+        <div class="cc-value" style="font-size:10px">쿤밍→다리→리장→호도협→쿤밍→구이린→양숴</div>
+      </div>
+      <div class="cover-card">
+        <div class="cc-icon">🌡️</div>
+        <div class="cc-label">11월 날씨</div>
+        <div class="cc-value">5~22°C<br><small style="opacity:0.6">옥룡설산 -5°C</small></div>
+      </div>
+      <div class="cover-card">
+        <div class="cc-icon">🎯</div>
+        <div class="cc-label">핵심 원칙</div>
+        <div class="cc-value" style="font-size:10px">샹그릴라 제외 · 체력 과부하 방지</div>
+      </div>
+      <div class="cover-card">
+        <div class="cc-icon">⭐</div>
+        <div class="cc-label">하이라이트</div>
+        <div class="cc-value" style="font-size:10px">호도협 트레킹 · 옥룡설산 · 리강크루즈</div>
+      </div>
+    </div>
+
+    <!-- 출국 -->
+    <div class="flight-summary">
+      <div class="fs-label">✈ 3명 출국 · 11/7 (토) · MU2004 · NEGZT3</div>
+      <div class="fs-route">
+        <div class="fs-point">
+          <div class="code">07:25</div>
+          <div class="name">ICN 인천</div>
+        </div>
+        <div class="fs-mid">
+          <div class="dur">5시간 20분</div>
+          <div class="line"></div>
+          <div class="info">중국동방항공 · 직항 · T1 · 보잉738</div>
+        </div>
+        <div class="fs-point">
+          <div class="code">11:45</div>
+          <div class="name">KMG 쿤밍</div>
+        </div>
+      </div>
+    </div>
+    <!-- A,B 귀국 -->
+    <div class="flight-summary">
+      <div class="fs-label">✈ A,B 귀국 · 11/21 (토) · MU9020 + MU8603(FM827)</div>
+      <div class="fs-route">
+        <div class="fs-point">
+          <div class="code">10:00</div>
+          <div class="name">KWL 구이린</div>
+        </div>
+        <div class="fs-mid">
+          <div class="dur">6시간 25분</div>
+          <div class="line"></div>
+          <div class="info">동방항공 · PVG 환승 2h · T2→T1</div>
+        </div>
+        <div class="fs-point">
+          <div class="code">17:25</div>
+          <div class="name">ICN 인천</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C 귀국 -->
+    <div class="flight-summary">
+      <div class="fs-label">✈ C 귀국 · 11/15 (일) · MU2003 · NEGZT3</div>
+      <div class="fs-route">
+        <div class="fs-point">
+          <div class="code">17:40</div>
+          <div class="name">KMG 쿤밍</div>
+        </div>
+        <div class="fs-mid">
+          <div class="dur">4시간 05분</div>
+          <div class="line"></div>
+          <div class="info">중국동방항공 · 직항 · T1</div>
+        </div>
+        <div class="fs-point">
+          <div class="code">22:45</div>
+          <div class="name">ICN 인천 T1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-map" id="map-route"></div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 1: 쿤밍 DAY 1-2 ══════ -->
+<div class="page page-kunming">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 1-2</div>
+      <div class="day-title">쿤밍 昆明</div>
+      <div class="day-date">11월 7일 (토) — 8일 (일)</div>
+      <div class="day-hotel-badge">🌸 취호공원–난핑제–쿤밍라오제 권역</div>
+    </div>
+    <div class="day-map" id="map-kunming"></div>
+
+    <div class="section-day-label">DAY 1 · 11/7 토</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon flight">✈️</div>
+          <div class="sched-body">
+            <div class="sched-time">07:25 출발 → 11:45 도착 (현지시간)</div>
+            <div class="sched-title">인천 → 쿤밍 (MU2004 · 직항 5h20m)</div>
+            <div class="sched-desc">중국동방항공 · 인천 T1 · 보잉 738 · 위탁수하물 1개<br><span style="font-size:11px;color:#64748b">예약번호: NEGZT3</span></div>
+            <div class="cn-name" onclick="copyText('昆明长水国际机场')">
+              <span class="cn-text">昆明长水国际机场</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-move">항공</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">🚗</div>
+        <div class="transit-info">공항 → 호텔 · <span class="t-dur">DiDi 약 40분</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">13:30–14:30</div>
+            <div class="sched-title">체크인 또는 짐 보관 · 늦은 점심</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌿</div>
+          <div class="sched-body">
+            <div class="sched-time">15:30–17:00</div>
+            <div class="sched-title">취호공원</div>
+            <div class="sched-desc">쿤밍 시내 중심의 아름다운 호수 공원</div>
+            <div class="sched-fee">🎟 무료</div>
+            <div class="cn-name" onclick="copyText('翠湖公园')">
+              <span class="cn-text">翠湖公园</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-body">
+            <div class="sched-time">17:10–18:00</div>
+            <div class="sched-title">원림가/문화 골목 산책</div>
+            <span class="sched-tag tag-spot">산책</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍜</div>
+          <div class="sched-body">
+            <div class="sched-time">18:00–19:20</div>
+            <div class="sched-title">저녁 — 과교미선</div>
+            <div class="sched-desc">쿤밍 대표 음식! 직접 재료를 넣어 먹는 쌀국수</div>
+            <div class="cn-name" onclick="copyText('过桥米线')">
+              <span class="cn-text">过桥米线</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-food">필수 맛집</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏮</div>
+          <div class="sched-body">
+            <div class="sched-time">19:30–21:30</div>
+            <div class="sched-title">쿤밍라오제 · 난핑제 야경</div>
+            <div class="cn-name" onclick="copyText('昆明老街')">
+              <span class="cn-text">昆明老街</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('南屏街')">
+              <span class="cn-text">南屏街</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">야경</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 2 · 11/8 일</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">☕</div>
+          <div class="sched-body">
+            <div class="sched-time">07:00</div>
+            <div class="sched-title">기상 · 조식</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">🚗</div>
+        <div class="transit-info">호텔 → 석림 · <span class="t-dur">차량 약 1.5시간</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🪨</div>
+          <div class="sched-body">
+            <div class="sched-time">09:30–14:00</div>
+            <div class="sched-title">석림풍경명승구</div>
+            <div class="sched-desc">2.7억년 카르스트 지형, 유네스코 세계유산. 기암괴석의 숲!</div>
+            <div class="sched-fee">🎟 ¥130 + 전동차 ¥25</div>
+            <div class="cn-name" onclick="copyText('石林风景名胜区')">
+              <span class="cn-text">石林风景名胜区</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span> <span class="sched-tag tag-fee">입장료</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">🚗</div>
+        <div class="transit-info">석림 → 시내 · <span class="t-dur">차량 약 1.5시간</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌊</div>
+          <div class="sched-body">
+            <div class="sched-time">17:00~</div>
+            <div class="sched-title">컨디션 좋으면 뎬츠/하이겅공원</div>
+            <div class="sched-desc">피곤하면 호텔 휴식</div>
+            <span class="sched-tag tag-spot">선택</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍲</div>
+          <div class="sched-body">
+            <div class="sched-time">19:00</div>
+            <div class="sched-title">저녁 — 야생 버섯전골</div>
+            <div class="sched-desc">윈난 특산! 다양한 야생 버섯을 넣은 전골. 쿤밍 필수 체험</div>
+            <div class="cn-name" onclick="copyText('野生菌火锅')">
+              <span class="cn-text">野生菌火锅</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-food">필수 맛집</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 2: 다리 DAY 3-4 ══════ -->
+<div class="page page-dali">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 3-4</div>
+      <div class="day-title">다리 大理</div>
+      <div class="day-date">11월 9일 (월) — 10일 (화)</div>
+      <div class="day-hotel-badge">🌊 다리고성 동문–얼하이문 바깥</div>
+    </div>
+    <div class="day-map" id="map-dali"></div>
+
+    <div class="section-day-label">DAY 3 · 11/9 월</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">☕</div>
+          <div class="sched-body">
+            <div class="sched-time">06:30</div>
+            <div class="sched-title">기상 · 조식 · 체크아웃</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon move">🚄</div>
+          <div class="sched-body">
+            <div class="sched-time">08:00대</div>
+            <div class="sched-title">쿤밍남 → 다리 고속열차</div>
+            <div class="sched-desc">약 2시간</div>
+            <div class="cn-name" onclick="copyText('昆明南站')">
+              <span class="cn-text">昆明南站</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('大理站')">
+              <span class="cn-text">大理站</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">🚗</div>
+        <div class="transit-info">역 → 숙소 · <span class="t-dur">DiDi 약 20분</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏛️</div>
+          <div class="sched-body">
+            <div class="sched-time">13:30–16:30</div>
+            <div class="sched-title">숭성사 삼탑</div>
+            <div class="sched-desc">다리의 상징, 천 년 역사의 불교 유적</div>
+            <div class="cn-name" onclick="copyText('崇圣寺三塔')">
+              <span class="cn-text">崇圣寺三塔</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span> <span class="sched-tag tag-fee">입장료</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-body">
+            <div class="sched-time">17:00–21:00</div>
+            <div class="sched-title">다리고성 산책 · 저녁 · 야경</div>
+            <div class="sched-desc">600년 역사의 바이족 고성. 골목 탐방, 소품숍, 간식거리</div>
+            <div class="sched-fee">🎟 무료</div>
+            <div class="cn-name" onclick="copyText('大理古城')">
+              <span class="cn-text">大理古城</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 4 · 11/10 화</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-body">
+            <div class="sched-time">08:30–11:00</div>
+            <div class="sched-title">시저우고진</div>
+            <div class="sched-desc">바이족 전통가옥 마을. 시저우바바(喜洲粑粑) 꼭 맛보기!</div>
+            <div class="sched-fee">🎟 무료</div>
+            <div class="cn-name" onclick="copyText('喜洲古镇')">
+              <span class="cn-text">喜洲古镇</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌊</div>
+          <div class="sched-body">
+            <div class="sched-time">12:30–17:00</div>
+            <div class="sched-title">얼하이 생태회랑</div>
+            <div class="sched-desc">자전거 또는 전동차로 호수 일주! 절경 포인트마다 사진 촬영</div>
+            <div class="cn-name" onclick="copyText('洱海生态廊道')">
+              <span class="cn-text">洱海生态廊道</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('洱海')">
+              <span class="cn-text">洱海</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌅</div>
+          <div class="sched-body">
+            <div class="sched-time">17:00–18:00</div>
+            <div class="sched-title">호숫가 일몰</div>
+            <span class="sched-tag tag-spot">일몰</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">19:00~</div>
+            <div class="sched-title">다리고성 귀환 · 바이족 요리</div>
+            <div class="sched-desc">다리 특색 바이족 전통 요리</div>
+            <div class="cn-name" onclick="copyText('白族菜')">
+              <span class="cn-text">白族菜</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-food">맛집</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 3: 리장 DAY 5-7 ══════ -->
+<div class="page page-lijiang">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 5-7</div>
+      <div class="day-title">리장 丽江</div>
+      <div class="day-date">11월 11일 (수) — 13일 (금)</div>
+      <div class="day-hotel-badge">🏮 리장고성 북문/대연화항 외곽</div>
+    </div>
+    <div class="day-map" id="map-lijiang"></div>
+
+    <div class="section-day-label">DAY 5 · 11/11 수 · 바이사고진</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon move">🚄</div>
+          <div class="sched-body">
+            <div class="sched-time">08:00대</div>
+            <div class="sched-title">다리 → 리장 고속열차</div>
+            <div class="sched-desc">약 1.5~2시간</div>
+            <div class="cn-name" onclick="copyText('丽江站')">
+              <span class="cn-text">丽江站</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-title">리장 숙소 · 짐 보관</div>
+            <div class="sched-desc">캐리어 이동, 호도협/옥룡설산 차량 픽업 편리한 곳</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-body">
+            <div class="sched-time">13:00–15:30</div>
+            <div class="sched-title">바이사고진</div>
+            <div class="sched-desc">리장에서 가장 오래된 나시족 마을. 바이사 벽화 유명</div>
+            <div class="cn-name" onclick="copyText('白沙古镇')">
+              <span class="cn-text">白沙古镇</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏮</div>
+          <div class="sched-body">
+            <div class="sched-time">17:30–21:00</div>
+            <div class="sched-title">리장고성 · 사방가 · 야경</div>
+            <div class="sched-desc">800년 나시족 고성의 화려한 밤</div>
+            <div class="cn-name" onclick="copyText('丽江古城')">
+              <span class="cn-text">丽江古城</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">야경</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 6 · 11/12 목 · 호도협 핵심 하이트레일</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hike">🥾</div>
+          <div class="sched-body">
+            <div class="sched-time">07:00 출발</div>
+            <div class="sched-title">기사 포함 전세차로 리장 출발</div>
+            <div class="sched-desc">좁고 가파른 산길이 있으므로 숙련 기사 우선. 여행 1~2주 전 예약 권장</div>
+            <br><span class="sched-tag tag-hike">트레킹</span> <span class="sched-tag tag-must">사전 예약</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hike">🏔️</div>
+          <div class="sched-body">
+            <div class="sched-time">09:40–10:10</div>
+            <div class="sched-title">차마객잔 전망/사진</div>
+            <div class="cn-name" onclick="copyText('茶马客栈')">
+              <span class="cn-text">茶马客栈</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-hike">트레킹</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hike">⛰️</div>
+          <div class="sched-body">
+            <div class="sched-time">10:10–13:30</div>
+            <div class="sched-title">차마객잔 → 중도객잔 핵심 트레킹</div>
+            <div class="sched-desc">28굽이 오르막은 제외. 차마→중도 핵심 구간만 도보. 난이도 ★★★☆☆</div>
+            <div class="cn-name" onclick="copyText('中途客栈')">
+              <span class="cn-text">中途客栈 (Halfway Guesthouse)</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-hike">이번 여행 하이라이트</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍜</div>
+          <div class="sched-body">
+            <div class="sched-time">13:30–14:30</div>
+            <div class="sched-title">중도객잔 테라스 점심 · 커피 · 휴식</div>
+            <span class="sched-tag tag-food">식사</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌊</div>
+          <div class="sched-body">
+            <div class="sched-time">15:00–16:00</div>
+            <div class="sched-title">상호도협 메인 전망 구간</div>
+            <div class="sched-desc">기사 픽업 후 차량 이동, 상호도협 관람</div>
+            <div class="cn-name" onclick="copyText('上虎跳峡')">
+              <span class="cn-text">上虎跳峡</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon massage">💆</div>
+          <div class="sched-body">
+            <div class="sched-time">18:00~</div>
+            <div class="sched-title">리장 복귀 · 저녁 · 마사지/족욕</div>
+            <div class="sched-desc">무조건 휴식. 다음날 옥룡설산 대비</div>
+            <span class="sched-tag tag-hotel">무조건 휴식</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <b>기사에게 보여줄 문장:</b><br>
+      <span class="cn-name" onclick="copyText('我们想从茶马客栈开始徒步到中途客栈。请在茶马客栈附近放我们下车，在中途客栈附近接我们，然后去上虎跳峡。')" style="margin-top:6px;display:inline-flex">
+        <span class="cn-text" style="font-size:12px;word-break:break-all">我们想从茶马客栈开始徒步到中途客栈。请在茶马客栈附近放我们下车，在中途客栈附近接我们，然后去上虎跳峡。</span>
+        <span class="cn-copy">📋</span>
+      </span>
+      <br><span style="font-size:11px;color:#60a5fa;margin-top:4px;display:block">차마객잔 근처에서 내려주고, 중도객잔 근처에서 픽업한 뒤 상호도협으로 이동하고 싶다는 뜻</span>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 7 · 11/13 금 · 옥룡설산 + 람월곡</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏔️</div>
+          <div class="sched-body">
+            <div class="sched-time">05:45 기상 · 06:30 출발</div>
+            <div class="sched-title">옥룡설산 · 빙천공원 대삭도</div>
+            <div class="sched-desc">목표 예약시간 08:00–09:30. 케이블카로 4,506m 전망대. 컨디션 좋을 때만 4,680m 추가</div>
+            <div class="sched-fee">🎟 입장 ¥100 + 케이블카 ¥120 + 셔틀 ¥20 = 약 ¥240</div>
+            <div class="cn-name" onclick="copyText('玉龙雪山')">
+              <span class="cn-text">玉龙雪山</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('冰川公园索道')">
+              <span class="cn-text">冰川公园索道</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span> <span class="sched-tag tag-fee">입장료</span> <span class="sched-tag tag-must">7일 전 예약</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">💎</div>
+          <div class="sched-body">
+            <div class="sched-time">13:00–15:30</div>
+            <div class="sched-title">람월곡</div>
+            <div class="sched-desc">하산 후 에메랄드빛 계곡 감상</div>
+            <div class="cn-name" onclick="copyText('蓝月谷')">
+              <span class="cn-text">蓝月谷</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">😴</div>
+          <div class="sched-body">
+            <div class="sched-time">18:00~</div>
+            <div class="sched-title">리장 복귀 · 저녁 · 휴식</div>
+            <span class="sched-tag tag-hotel">휴식</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <b>고산 원칙:</b> 케이블카 하차 후 바로 계단을 몰아 오르지 말고 10~20분 상태 확인. 두통·메스꺼움·심한 어지럼·숨참이 생기거나 악화되면 더 올라가지 말고 내려옵니다. 산소캔 미리 구매(산 아래 편의점이 저렴). 전날 술 금지.
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 4: 이동+분리 DAY 8-9 ══════ -->
+<div class="page page-split">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 8-9</div>
+      <div class="day-title">이동 · 배웅</div>
+      <div class="day-date">11월 14일 (토) — 15일 (일)</div>
+      <div class="day-hotel-badge">👋 리장→쿤밍 · 일행 배웅</div>
+    </div>
+
+    <div class="section-day-label">DAY 8 · 11/14 토 · 흑룡담 + 리장→쿤밍</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌊</div>
+          <div class="sched-body">
+            <div class="sched-time">08:30–10:00</div>
+            <div class="sched-title">흑룡담공원</div>
+            <div class="sched-desc">옥룡설산이 호수에 비치는 절경 포인트</div>
+            <div class="cn-name" onclick="copyText('黑龙潭公园')">
+              <span class="cn-text">黑龙潭公园</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏮</div>
+          <div class="sched-body">
+            <div class="sched-time">10:15–11:30</div>
+            <div class="sched-title">리장고성 마지막 산책 / 목부 선택</div>
+            <span class="sched-tag tag-spot">산책</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon move">🚄</div>
+          <div class="sched-body">
+            <div class="sched-time">14:00~15:00대</div>
+            <div class="sched-title">리장 → 쿤밍 고속열차</div>
+            <div class="sched-desc">약 4시간</div>
+            <div class="cn-name" onclick="copyText('昆明南站')">
+              <span class="cn-text">昆明南站</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">18:30~20:00</div>
+            <div class="sched-title">쿤밍 도착 · 호텔 · 저녁</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 9 · 11/15 일 · 일행 배웅</div>
+
+    <div class="tl-wrap">
+      <div class="tl-item">
+        <div class="tl-time">08:00</div>
+        <div class="tl-content">
+          <div class="tl-title">조식</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">09:00</div>
+        <div class="tl-content">
+          <div class="tl-title">쿤밍 시내 가벼운 자유시간 / 카페</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">11:30</div>
+        <div class="tl-content">
+          <div class="tl-title">마지막 점심 (함께)</div>
+          <div class="tl-desc">함께하는 마지막 식사</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">13:30</div>
+        <div class="tl-content">
+          <div class="tl-title">3명 쿤밍 시내 자유시간 / 쇼핑</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">14:30</div>
+        <div class="tl-content">
+          <div class="tl-title">호텔 출발 → 쿤밍 창수이공항</div>
+          <div class="tl-desc">DiDi 약 40분</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">15:15</div>
+        <div class="tl-content">
+          <div class="tl-title">공항 도착 · C 체크인 보조</div>
+          <div class="tl-desc">MU2003 · 위탁수하물 1개 · T1</div>
+          <div class="cn-name" onclick="copyText('昆明长水国际机场')" style="margin-top:4px">
+            <span class="cn-text">昆明长水国际机场</span>
+            <span class="cn-copy">📋</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item highlight">
+        <div class="tl-time">15:40</div>
+        <div class="tl-content">
+          <div class="tl-title">C 배웅 👋</div>
+          <div class="tl-desc">중국동방항공 MU2003 직항<br>KMG 17:40 → ICN 22:45 (4h05m)</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">15:50</div>
+        <div class="tl-content">
+          <div class="tl-title">A,B 공항 출발 → 쿤밍남역 권역</div>
+          <div class="tl-desc">택시 약 40분</div>
+          <div class="cn-name" onclick="copyText('昆明南站')" style="margin-top:4px">
+            <span class="cn-text">昆明南站</span>
+            <span class="cn-copy">📋</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">16:30~</div>
+        <div class="tl-content">
+          <div class="tl-title">쿤밍남역 근처 호텔 체크인</div>
+          <div class="tl-desc">저녁 식사 · 일찍 휴식 · 다음날 열차 대비</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <b>C 귀국:</b> 동방항공 MU2003 직항 KMG 17:40 → ICN 22:45 (4h05m)<br>
+      <b>A,B:</b> 배웅 후 쿤밍남역 근처 1박 → 11/16 아침 G2938(08:24)로 구이린 이동
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 5: 구이린 DAY 10-11 ══════ -->
+<div class="page page-guilin">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 10-11</div>
+      <div class="day-title">구이린 桂林</div>
+      <div class="day-date">11월 16일 (월) — 17일 (화)</div>
+      <div class="day-hotel-badge">🏞️ 상비산–정양보행가–동서항 권역</div>
+    </div>
+    <div class="day-map" id="map-guilin"></div>
+
+    <div class="section-day-label">DAY 10 · 11/16 월 · 쿤밍→구이린</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon move">🚄</div>
+          <div class="sched-body">
+            <div class="sched-time">08:24 목표 (G2938)</div>
+            <div class="sched-title">쿤밍남 → 구이린서 고속열차</div>
+            <div class="sched-desc">약 4.5시간, 12:52 도착 목표. 현재 운행 패턴 기준</div>
+            <div class="cn-name" onclick="copyText('桂林西站')">
+              <span class="cn-text">桂林西站</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🐘</div>
+          <div class="sched-body">
+            <div class="sched-time">16:00–17:30</div>
+            <div class="sched-title">상비산</div>
+            <div class="sched-desc">구이린의 상징 코끼리 코 모양 바위산</div>
+            <div class="sched-fee">🎟 ¥70</div>
+            <div class="cn-name" onclick="copyText('象鼻山')">
+              <span class="cn-text">象鼻山</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span> <span class="sched-tag tag-fee">입장료</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-body">
+            <div class="sched-time">17:45–19:00</div>
+            <div class="sched-title">동서항 · 저녁</div>
+            <div class="sched-desc">구이린 전통 거리, 먹거리와 야경</div>
+            <div class="cn-name" onclick="copyText('东西巷')">
+              <span class="cn-text">东西巷</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌙</div>
+          <div class="sched-body">
+            <div class="sched-time">19:30–21:30</div>
+            <div class="sched-title">양강사호 · 일월쌍탑 야경</div>
+            <div class="sched-desc">호수 위의 금은 쌍탑이 야경에 빛나는 절경</div>
+            <div class="cn-name" onclick="copyText('两江四湖')">
+              <span class="cn-text">两江四湖</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('日月双塔')">
+              <span class="cn-text">日月双塔</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">야경</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 11 · 11/17 화 · 리강 크루즈 → 양숴</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🚣</div>
+          <div class="sched-body">
+            <div class="sched-time">07:30 죽강부두 이동 · 09:20 출항 목표</div>
+            <div class="sched-title">리강 4성급 크루즈 (구이린 → 양숴)</div>
+            <div class="sched-desc">20위안 지폐 뒷면 풍경! 약 4시간 앉아서 편하게 산수화 감상</div>
+            <div class="sched-fee">🎟 약 ¥360 (변동 가능)</div>
+            <div class="cn-name" onclick="copyText('竹江码头')">
+              <span class="cn-text">竹江码头</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('漓江游船')">
+              <span class="cn-text">漓江游船</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span> <span class="sched-tag tag-must">예약 우선</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">13:30~14:00</div>
+            <div class="sched-title">양숴 도착 · 숙소 이동</div>
+            <div class="sched-desc">서가 도보 10~15분, 차량 진입 가능한 조용한 곳</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">☕</div>
+          <div class="sched-body">
+            <div class="sched-time">15:00–17:30</div>
+            <div class="sched-title">강변 산책 · 카페 · 휴식</div>
+            <span class="sched-tag tag-hotel">휴식</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🐟</div>
+          <div class="sched-body">
+            <div class="sched-time">18:00–19:30</div>
+            <div class="sched-title">저녁 — 맥주어</div>
+            <div class="sched-desc">양숴 명물! 맥주로 조리한 민물고기 요리</div>
+            <div class="cn-name" onclick="copyText('啤酒鱼')">
+              <span class="cn-text">啤酒鱼</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-food">필수 맛집</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏮</div>
+          <div class="sched-body">
+            <div class="sched-time">19:30–21:30</div>
+            <div class="sched-title">서가 야경</div>
+            <div class="sched-desc">외국인의 거리. 기념품, 카페, 바 거리 산책</div>
+            <div class="cn-name" onclick="copyText('西街')">
+              <span class="cn-text">西街</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('阳朔西街')">
+              <span class="cn-text">阳朔西街</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">야경</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 6: 양숴 DAY 12-13 ══════ -->
+<div class="page page-yangshuo">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 12-13</div>
+      <div class="day-title">양숴 阳朔</div>
+      <div class="day-date">11월 18일 (수) — 19일 (목)</div>
+      <div class="day-hotel-badge">🌄 산수갑천하</div>
+    </div>
+    <div class="day-map" id="map-yangshuo"></div>
+
+    <div class="section-day-label">DAY 12 · 11/18 수 · 위룽허 + 십리화랑</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🎋</div>
+          <div class="sched-body">
+            <div class="sched-time">08:30–10:30</div>
+            <div class="sched-title">위룽허 대나무뗏목</div>
+            <div class="sched-desc">오전 타임 권장. 인기 노선이 전날 저녁 공개되는 경우 있음</div>
+            <div class="cn-name" onclick="copyText('遇龙河竹筏')">
+              <span class="cn-text">遇龙河竹筏</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span> <span class="sched-tag tag-must">예약 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🚲</div>
+          <div class="sched-body">
+            <div class="sched-time">12:30–17:00</div>
+            <div class="sched-title">십리화랑</div>
+            <div class="sched-desc">자전거 또는 전기스쿠터로 카르스트 농촌 풍경 감상</div>
+            <div class="cn-name" onclick="copyText('十里画廊')">
+              <span class="cn-text">十里画廊</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌅</div>
+          <div class="sched-body">
+            <div class="sched-time">17:00–18:00</div>
+            <div class="sched-title">카르스트 농촌 풍경 · 일몰</div>
+            <span class="sched-tag tag-spot">일몰</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">18:30~</div>
+            <div class="sched-title">저녁 · 공연은 컨디션 좋을 때만 선택</div>
+            <span class="sched-tag tag-food">식사</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 13 · 11/19 목 · 상공산 + 싱핑</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">⛰️</div>
+          <div class="sched-body">
+            <div class="sched-time">07:30 이동 · 08:30–10:00</div>
+            <div class="sched-title">상공산 전망대</div>
+            <div class="sched-desc">리강이 내려다보이는 최고의 파노라마 전망</div>
+            <div class="cn-name" onclick="copyText('相公山')">
+              <span class="cn-text">相公山</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-body">
+            <div class="sched-time">10:30–12:00</div>
+            <div class="sched-title">싱핑고진</div>
+            <div class="sched-desc">소박한 고대 마을, 리강변 풍경</div>
+            <div class="cn-name" onclick="copyText('兴坪古镇')">
+              <span class="cn-text">兴坪古镇</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">관광</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">💴</div>
+          <div class="sched-body">
+            <div class="sched-time">13:00–14:30</div>
+            <div class="sched-title">20위안 지폐 풍경 포인트 · 리강 산책</div>
+            <div class="sched-desc">20위안 뒷면에 인쇄된 바로 그 풍경!</div>
+            <br><span class="sched-tag tag-spot">포토 스팟</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">☕</div>
+          <div class="sched-body">
+            <div class="sched-time">16:00~</div>
+            <div class="sched-title">양숴 복귀 · 카페 · 마사지 · 자유시간</div>
+            <div class="sched-desc">오후는 의도적으로 비움</div>
+            <span class="sched-tag tag-hotel">일부러 비움</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 7: 완충+귀국 DAY 14-15 ══════ -->
+<div class="page page-return">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 14-15</div>
+      <div class="day-title">완충 · 귀국</div>
+      <div class="day-date">11월 20일 (금) — 21일 (토)</div>
+      <div class="day-hotel-badge">✈️ 마무리</div>
+    </div>
+
+    <div class="section-day-label">DAY 14 · 11/20 금 · 완충일 → 구이린</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">☕</div>
+          <div class="sched-body">
+            <div class="sched-time">08:00</div>
+            <div class="sched-title">늦은 조식</div>
+            <span class="sched-tag tag-hotel">여유</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🔄</div>
+          <div class="sched-body">
+            <div class="sched-time">09:00–11:30</div>
+            <div class="sched-title">완충시간</div>
+            <div class="sched-desc">전날 날씨 때문에 못 본 곳 보충 / 아니면 늦잠·카페. 상공산/위룽허가 꼬였을 때 보충하는 보험</div>
+            <span class="sched-tag tag-spot">보충 가능</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">🚗</div>
+        <div class="transit-info">양숴 → 구이린 · <span class="t-dur">차량 약 1.5시간</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">15:30</div>
+            <div class="sched-title">구이린 체크인</div>
+            <div class="sched-desc">다음날 공항 접근 가능한 시내</div>
+            <span class="sched-tag tag-hotel">숙소</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon shop">🛍️</div>
+          <div class="sched-body">
+            <div class="sched-time">17:00–18:30</div>
+            <div class="sched-title">구이린 시내 마지막 산책 · 쇼핑</div>
+            <span class="sched-tag tag-shop">쇼핑</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">18:30–20:00</div>
+            <div class="sched-title">여행 마지막 저녁</div>
+            <div class="sched-desc">구이린 미펀도 추천!</div>
+            <div class="cn-name" onclick="copyText('桂林米粉')">
+              <span class="cn-text">桂林米粉</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-food">맛집</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🧳</div>
+          <div class="sched-body">
+            <div class="sched-time">20:00~</div>
+            <div class="sched-title">짐 정리 · 일찍 취침</div>
+            <span class="sched-tag tag-hotel">마무리</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-day-label">DAY 15 · 11/21 토 · 귀국</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">⏰</div>
+          <div class="sched-body">
+            <div class="sched-time">06:00</div>
+            <div class="sched-title">기상 · 체크아웃</div>
+            <span class="sched-tag tag-hotel">체크아웃</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">🚗</div>
+        <div class="transit-info">구이린 → 량장공항 · <span class="t-dur">06:40–07:30</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon flight">✈️</div>
+          <div class="sched-body">
+            <div class="sched-time">10:00 출발</div>
+            <div class="sched-title">구이린 → 상하이 (MU9020 · 2h05m)</div>
+            <div class="sched-desc">중국동방항공 · 구이린량장공항 출발 → 12:05 상하이푸동 도착</div>
+            <div class="cn-name" onclick="copyText('桂林两江国际机场')">
+              <span class="cn-text">桂林两江国际机场</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-move">항공</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit-icon">⏳</div>
+        <div class="transit-info">상하이푸동 공항 내 환승 · <span class="t-dur">대기 2시간</span></div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon flight">✈️</div>
+          <div class="sched-body">
+            <div class="sched-time">14:05 출발 → 17:25 도착</div>
+            <div class="sched-title">상하이 → 인천 (MU8603 · 2h20m)</div>
+            <div class="sched-desc">상하이항공 운항 · 인천공항 도착</div>
+            <div class="cn-name" onclick="copyText('上海浦东国际机场')">
+              <span class="cn-text">上海浦东国际机场</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-move">항공</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon flight">🏠</div>
+          <div class="sched-body">
+            <div class="sched-time">17:25</div>
+            <div class="sched-title">인천공항 도착!</div>
+            <div class="sched-desc">수고하셨습니다! 14박 15일 대장정 완료!</div>
+            <span class="sched-tag tag-move">도착</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:40px;padding:40px 20px;color:#64748b;font-size:14px;line-height:2">
+      <div style="font-size:40px;margin-bottom:16px">🏔️🌊🏞️</div>
+      윈난의 설산과 고성<br>
+      호도협의 절벽 트레킹<br>
+      구이린·양숴의 산수화 같은 풍경<br><br>
+      <span style="color:#f59e0b;font-weight:700">즐거운 여행 되세요!</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 8: TIPS & CHECKLIST ══════ -->
+<div class="page page-tips">
+  <div class="tips-page">
+    <h2>꿀팁 · 예약 · 체크리스트</h2>
+
+    <div class="tip-section">
+      <h3>🏨 숙소 추천 권역</h3>
+      <div class="tip-card">
+        <div class="tip-text">
+          <b>쿤밍:</b> 취호공원–난핑제–쿤밍라오제 <span class="cn-name" onclick="copyText('翠湖 / 南屏街')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">翠湖/南屏街</span><span class="cn-copy">📋</span></span><br>
+          <b>다리:</b> 고성 동문–얼하이문 바깥 <span class="cn-name" onclick="copyText('大理古城 洱海门')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">大理古城 洱海门</span><span class="cn-copy">📋</span></span><br>
+          <b>리장:</b> 고성 북문/대연화항 외곽 <span class="cn-name" onclick="copyText('丽江古城 北门')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">丽江古城 北门</span><span class="cn-copy">📋</span></span><br>
+          <b>구이린:</b> 상비산–정양보행가 <span class="cn-name" onclick="copyText('象鼻山 / 正阳步行街')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">象鼻山/正阳步行街</span><span class="cn-copy">📋</span></span><br>
+          <b>양숴:</b> 서가 도보 10~15분 <span class="cn-name" onclick="copyText('阳朔西街 1公里')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">阳朔西街 1公里</span><span class="cn-copy">📋</span></span>
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-text" style="font-size:12px;color:#64748b">
+          <b>공통 필터:</b> 무료취소 · 엘리베이터/저층 · DiDi 진입 가능 · 세탁 가능 · "安静(조용함) / 打车方便(택시 편리)" 후기 확인
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-section">
+      <h3>🎯 예약 우선순위 TOP 5</h3>
+      <div class="tip-card">
+        <div class="tip-title">1. 옥룡설산 · 11/13</div>
+        <div class="tip-text">공식 안내상 입장권+빙천공원 대삭도 <b>7일 전 실명 예약</b>. 11/06에 집중. 위챗 미니프로그램
+          <span class="cn-name" onclick="copyText('玉龙雪山服务')" style="margin:2px 0;padding:2px 6px"><span class="cn-text" style="font-size:11px">玉龙雪山服务</span><span class="cn-copy">📋</span></span>
+          목표 삭도 슬롯 08:00–09:30</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">2. 리강 4성급 크루즈 · 11/17</div>
+        <div class="tip-text">11/10 전후부터 공식 채널 확인. 죽강부두
+          <span class="cn-name" onclick="copyText('竹江码头')" style="margin:2px 0;padding:2px 6px"><span class="cn-text" style="font-size:11px">竹江码头</span><span class="cn-copy">📋</span></span>
+          목표 09:20. 표준가 ¥360 (변동 가능)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">3. 호도협 기사/차량 · 11/12</div>
+        <div class="tip-text">1~2주 전 예약. 핵심: "차마객잔 드롭 → 중도객잔 픽업 → 상호도협". 좁고 가파른 산길, 숙련 기사 우선</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">4. 고속열차 4구간</div>
+        <div class="tip-text">12306 현재 15일 전 예매. 목표:<br>
+          11/9편(쿤밍→다리) <b>10/26</b> · 11/11편(다리→리장) <b>10/28</b><br>
+          11/14편(리장→쿤밍) <b>10/31</b> · 11/16편(쿤밍→구이린) <b>11/02</b></div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">5. 위룽허 대나무뗏목 · 11/18</div>
+        <div class="tip-text">공식 사이트 예약. 오전 08:30–10:00 권장. 인기 노선 전날 저녁 공개 가능성 → 11/17 오후 재확인</div>
+      </div>
+    </div>
+
+    <div class="tip-section">
+      <h3>🚄 열차 시간대</h3>
+      <div class="tip-card">
+        <div class="tip-text" style="font-size:12px;line-height:2">
+          <b>11/09</b> 쿤밍남→다리 08:00대 출발 (2시간)<br>
+          <b>11/11</b> 다리→리장 08:00 전후 출발 (1.5~2시간)<br>
+          <b>11/14</b> 리장→쿤밍 14:00~15:00 출발 (약 4시간)<br>
+          <b>11/16</b> 쿤밍남→구이린서 <b>08:24 목표</b> G2938 (4.5시간)
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-text" style="font-size:11px">열차번호는 지금 고정하지 않습니다. 11월 실제 운행표 열리면 같은 시간대 직통편 우선. 4시간대 구간은 1등석도 고려.</div>
+      </div>
+    </div>
+
+    <div class="tip-section">
+      <h3>🏔️ 체력 · 고도 대응</h3>
+      <div class="tip-card">
+        <div class="tip-text">
+          <b>체력 피크:</b> 11/12 호도협 → 11/13 옥룡설산 → 11/14 이동. 저녁은 가볍게<br>
+          <b>호도협:</b> 차마→중도 핵심 구간만, 28굽이 오르막 제외<br>
+          <b>옥룡설산:</b> 4,500m대 별개. 증상 있으면 4,680m 포기<br>
+          <b>구이린 완충:</b> 11/20 오전 = 상공산/위룽허 보충 보험
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-section">
+      <h3>🗣️ 중국어 (탭해서 복사)</h3>
+      <div class="tip-card">
+        <div class="tip-text" style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px">
+          <span class="cn-name" onclick="copyText('你好')" style="margin:0"><span class="cn-text">你好</span><span class="cn-copy">📋</span></span><span>니하오 (안녕하세요)</span>
+          <span class="cn-name" onclick="copyText('谢谢')" style="margin:0"><span class="cn-text">谢谢</span><span class="cn-copy">📋</span></span><span>씨에씨에 (감사합니다)</span>
+          <span class="cn-name" onclick="copyText('多少钱')" style="margin:0"><span class="cn-text">多少钱</span><span class="cn-copy">📋</span></span><span>뚜어샤오치엔 (얼마예요?)</span>
+          <span class="cn-name" onclick="copyText('买单')" style="margin:0"><span class="cn-text">买单</span><span class="cn-copy">📋</span></span><span>마이단 (계산이요)</span>
+          <span class="cn-name" onclick="copyText('卫生间在哪里')" style="margin:0"><span class="cn-text">卫生间在哪里</span><span class="cn-copy">📋</span></span><span>화장실 어디예요?</span>
+          <span class="cn-name" onclick="copyText('不要辣')" style="margin:0"><span class="cn-text">不要辣</span><span class="cn-copy">📋</span></span><span>부야오라 (안 맵게요)</span>
+          <span class="cn-name" onclick="copyText('我要去这个地方')" style="margin:0"><span class="cn-text">我要去这个地方</span><span class="cn-copy">📋</span></span><span>이 곳에 가고 싶어요</span>
+          <span class="cn-name" onclick="copyText('高铁站怎么走')" style="margin:0"><span class="cn-text">高铁站怎么走</span><span class="cn-copy">📋</span></span><span>고속철역 어떻게 가요?</span>
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">기사에게 자주 쓸 문장</div>
+        <div class="tip-text" style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px">
+          <span class="cn-name" onclick="copyText('请在这里等我们。')" style="margin:0"><span class="cn-text">请在这里等我们。</span><span class="cn-copy">📋</span></span><span>여기서 기다려 주세요</span>
+          <span class="cn-name" onclick="copyText('我们大概三小时后到中途客栈。')" style="margin:0"><span class="cn-text">我们大概三小时后到中途客栈。</span><span class="cn-copy">📋</span></span><span>약 3시간 후 중도객잔 도착</span>
+          <span class="cn-name" onclick="copyText('请送我们到昆明南站。')" style="margin:0"><span class="cn-text">请送我们到昆明南站。</span><span class="cn-copy">📋</span></span><span>쿤밍남역으로 가주세요</span>
+          <span class="cn-name" onclick="copyText('请送我们到桂林两江国际机场。')" style="margin:0"><span class="cn-text">请送我们到桂林两江国际机场。</span><span class="cn-copy">📋</span></span><span>구이린 량장공항으로 가주세요</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-section">
+      <h3>🔗 검증 출처</h3>
+      <div class="tip-card">
+        <div class="tip-text" style="font-size:12px;line-height:2">
+          <a href="https://www.yn.xinhuanet.com/20260718/f2d1560d5043462c9c5967496da38808/c.html" target="_blank" style="color:#60a5fa">옥룡설산 2026 예약 안내 (신화망)</a><br>
+          <a href="https://mobile.12306.cn/weixin/wxcore/ysqcx" target="_blank" style="color:#60a5fa">중국철도 12306 예매기간 조회</a><br>
+          <a href="https://trains.ctrip.com/TrainBooking/kunming-guilin/gaotie" target="_blank" style="color:#60a5fa">쿤밍→구이린 열차 패턴 참고</a><br>
+          <a href="https://www.ysylh.cn/reservation/" target="_blank" style="color:#60a5fa">위룽허 공식 예약 페이지</a><br>
+          <a href="https://www.lijiangriver.com.cn/" target="_blank" style="color:#60a5fa">리강 관광지 공식 사이트</a>
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-text" style="font-size:11px;color:#64748b">
+          관광지 운영시간, 요금, 기차편, 예약 오픈시간은 2026년 11월 실제 운영 공지에 따라 바뀔 수 있습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-section">
+      <h3>✅ 준비물 체크리스트</h3>
+      <div class="checklist">
+        <label><input type="checkbox"> 여권 (유효기간 6개월+)</label>
+        <label><input type="checkbox"> e-티켓 출력</label>
+        <label><input type="checkbox"> 중국 유심 / eSIM (VPN 포함)</label>
+        <label><input type="checkbox"> 알리페이 등록</label>
+        <label><input type="checkbox"> 위챗/알리페이 결제 세팅</label>
+        <label><input type="checkbox"> DiDi 앱 설치</label>
+        <label><input type="checkbox"> 가오더지도 (高德地图) 설치</label>
+        <label><input type="checkbox"> 기차표 예매 (12306/Trip.com)</label>
+        <label><input type="checkbox"> 환전 (위안화)</label>
+        <label><input type="checkbox"> 경량 패딩 + 방풍 겉옷</label>
+        <label><input type="checkbox"> 미끄럽지 않은 운동화/트레킹화</label>
+        <label><input type="checkbox"> 자외선차단제</label>
+        <label><input type="checkbox"> 선글라스</label>
+        <label><input type="checkbox"> 보습크림</label>
+        <label><input type="checkbox"> 작은 배낭, 물, 보조배터리</label>
+        <label><input type="checkbox"> 여행자보험 가입</label>
+        <label><input type="checkbox"> 상비약 (두통약, 소화제, 멀미약)</label>
+        <label><input type="checkbox"> 호도협용 간식 · 스틱(필요시)</label>
+        <label><input type="checkbox"> 카메라</label>
+        <label><input type="checkbox"> 옥룡설산 산소캔</label>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:30px;padding:20px;color:#64748b;font-size:13px">
+      <small style="opacity:0.5">Last updated: 2026. 09. 11</small><br>
+      <small style="opacity:0.3;font-size:11px">2026 윈난·구이린·양숴 최종 여행 플랜</small>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 9: BUDGET ══════ -->
+<div class="page page-budget">
+  <div class="budget-page">
+    <h2>💰 예상 경비</h2>
+
+    <p style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:6px"><b>A/B 1인당</b> · 14박 15일 · ¥1 ≈ ₩200</p>
+    <p style="text-align:center;font-size:11px;color:#64748b;margin-bottom:18px">항공권: 확정가 · 나머지: 추정</p>
+
+    <table class="budget-table" id="budgetTableAB">
+      <tr><td>✈️ 항공권</td><td>확정 (왕복)</td><td>₩640,899</td></tr>
+      <tr><td>🏨 숙소</td><td>14박 ¥150/인</td><td>₩420,000</td></tr>
+      <tr><td>🚄 고속열차</td><td>4구간 ¥863</td><td>₩173,000</td></tr>
+      <tr><td>🎟️ 입장료</td><td>석림·설산·크루즈 등</td><td>₩257,000</td></tr>
+      <tr><td>🍽️ 식비</td><td>¥100/일 × 15일</td><td>₩300,000</td></tr>
+      <tr><td>🚗 교통</td><td>DiDi·버스·전세차</td><td>₩100,000</td></tr>
+      <tr><td>💆 마사지</td><td>2~3회</td><td>₩40,000</td></tr>
+      <tr><td>📱 통신</td><td>유심/eSIM</td><td>₩20,000</td></tr>
+      <tr><td>🛡️ 보험</td><td>여행자보험</td><td>₩15,000</td></tr>
+      <tr><td>🛍️ 기타</td><td>쇼핑·간식</td><td>₩100,000</td></tr>
+      <tr class="total"><td>A/B 1인 합계</td><td></td><td id="totalAB">₩0</td></tr>
+    </table>
+
+    <div style="height:24px"></div>
+
+    <p style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:6px"><b>C 1인</b> · 8박 9일 · 참고용</p>
+
+    <table class="budget-table" id="budgetTableC">
+      <tr><td>✈️ 항공권</td><td>확정 (왕복)</td><td>₩637,900</td></tr>
+      <tr><td>🏨 숙소</td><td>8박 ¥100/인 (3인)</td><td>₩160,000</td></tr>
+      <tr><td>🚄 고속열차</td><td>2구간 ¥218</td><td>₩44,000</td></tr>
+      <tr><td>🎟️ 입장료</td><td>석림·설산 등 ¥595</td><td>₩119,000</td></tr>
+      <tr><td>🍽️ 식비</td><td>¥100/일 × 9일</td><td>₩180,000</td></tr>
+      <tr><td>🚗 교통</td><td>DiDi·전세차(÷3)</td><td>₩67,000</td></tr>
+      <tr><td>📱 통신</td><td>유심/eSIM</td><td>₩20,000</td></tr>
+      <tr><td>🛡️ 보험</td><td>여행자보험</td><td>₩15,000</td></tr>
+      <tr><td>🛍️ 기타</td><td></td><td>₩60,000</td></tr>
+      <tr class="total"><td>C 합계</td><td></td><td id="totalC">₩0</td></tr>
+    </table>
+
+    <div class="budget-note">
+      💡 <b>입장료 상세 (1인 기준)</b><br>
+      석림 ¥155 · 숭성사삼탑 ¥75 · 리장고성 ¥50 · 호도협 ¥45<br>
+      옥룡설산(입장+삭도+셔틀) ¥240 · 상비산 ¥70<br>
+      리강 크루즈 ¥360 · 위룽허 뗏목 ¥200<br>
+      십리화랑 전동차 ¥30 · 상공산 ¥60
+    </div>
+
+    <div class="budget-note" style="margin-top:8px">
+      💡 <b>참고 물가</b><br>
+      · 택시 기본 ¥10 (~₩2,000) · 식사 1인 ¥30~100<br>
+      · 숙소 1박 ¥150~500 (민숙~호텔)<br>
+      · 호도협 전세차(하루) ¥800~1,200 (인원수 나누기)<br>
+      · 산소캔 ¥15~30 · 한국 대비 물가 약 60~70%
+    </div>
+
+    <div style="text-align:center;margin-top:32px;padding:20px;color:#64748b;font-size:12px">
+      <small style="opacity:0.5">환율 기준: 2026년 9월 · ¥1 ≈ ₩200</small>
+    </div>
+  </div>
+</div>
+
+</div><!-- /swipe-wrap -->
+
+<script>
+// -- Dot Indicator --
+const wrap = document.getElementById('swipeWrap');
+const pages = document.querySelectorAll('.page');
+const dotsEl = document.getElementById('dots');
+const toast = document.getElementById('toast');
+let current = 0;
+
+pages.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => {
+    pages[i].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+  };
+  dotsEl.appendChild(d);
+});
+
+const dots = dotsEl.querySelectorAll('.dot');
+
+function updateDots() {
+  const scrollLeft = wrap.scrollLeft;
+  const w = wrap.offsetWidth;
+  const idx = Math.round(scrollLeft / w);
+  if (idx !== current) {
+    current = idx;
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+}
+
+wrap.addEventListener('scroll', updateDots, { passive: true });
+
+// -- Copy Chinese Text --
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showToast).catch(fallbackCopy);
+  } else {
+    fallbackCopy();
+  }
+  function fallbackCopy() {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast();
+  }
+  function showToast() {
+    toast.textContent = '📋 복사됨! — ' + text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1200);
+  }
+}
+
+// -- Persist checkbox state --
+document.querySelectorAll('.checklist input').forEach((cb, i) => {
+  const key = 'ynf_check_' + i;
+  cb.checked = localStorage.getItem(key) === '1';
+  cb.addEventListener('change', () => {
+    localStorage.setItem(key, cb.checked ? '1' : '0');
+  });
+});
+
+// -- Leaflet Maps --
+function initMaps() {
+  const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+  const markerIcon = L.divIcon({
+    className: '',
+    html: '<div style="width:12px;height:12px;background:#f59e0b;border:2px solid #fff;border-radius:50%;box-shadow:0 0 6px rgba(245,158,11,0.6)"></div>',
+    iconSize: [12, 12],
+    iconAnchor: [6, 6]
+  });
+
+  function makeMap(id, center, zoom, markers) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const map = L.map(el, {
+      zoomControl: false,
+      attributionControl: false,
+      dragging: true,
+      scrollWheelZoom: false
+    }).setView(center, zoom);
+    L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
+    markers.forEach(m => {
+      const mapLink = 'https://www.google.com/maps/search/' + encodeURIComponent(m.cn || m.name) + '/@' + m.ll[0] + ',' + m.ll[1] + ',14z';
+      L.marker(m.ll, { icon: markerIcon }).addTo(map).bindPopup(
+        '<div style="font-size:13px;font-weight:600;color:#1a1a1a">' + m.name + '</div>' +
+        (m.cn ? '<div style="font-size:12px;color:#666">' + m.cn + '</div>' : '') +
+        '<a href="' + mapLink + '" target="_blank" rel="noopener" style="font-size:11px;color:#2563eb;text-decoration:none;display:inline-block;margin-top:4px">Google Maps에서 보기 →</a>'
+      );
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) map.invalidateSize(); });
+    }, { threshold: 0.1 });
+    observer.observe(el);
+  }
+
+  // Route map (cover)
+  makeMap('map-route', [26.0, 106], 5, [
+    { ll: [25.04, 102.72], name: '쿤밍', cn: '昆明' },
+    { ll: [25.61, 100.27], name: '다리', cn: '大理' },
+    { ll: [26.87, 100.23], name: '리장', cn: '丽江' },
+    { ll: [25.27, 110.29], name: '구이린', cn: '桂林' },
+    { ll: [24.77, 110.49], name: '양숴', cn: '阳朔' }
+  ]);
+
+  // Kunming
+  makeMap('map-kunming', [24.95, 103.0], 9, [
+    { ll: [25.10, 102.93], name: '창수이 공항', cn: '昆明长水国际机场' },
+    { ll: [25.05, 102.71], name: '취호공원', cn: '翠湖公园' },
+    { ll: [24.77, 103.33], name: '석림', cn: '石林风景名胜区' }
+  ]);
+
+  // Dali
+  makeMap('map-dali', [25.72, 100.17], 11, [
+    { ll: [25.5925, 100.1647], name: '다리고성', cn: '大理古城' },
+    { ll: [25.7087, 100.1472], name: '숭성사삼탑', cn: '崇圣寺三塔' },
+    { ll: [25.75, 100.22], name: '얼하이호', cn: '洱海' },
+    { ll: [25.865, 100.1515], name: '시저우고진', cn: '喜洲古镇' }
+  ]);
+
+  // Lijiang
+  makeMap('map-lijiang', [27.0, 100.2], 10, [
+    { ll: [26.87, 100.23], name: '리장고성', cn: '丽江古城' },
+    { ll: [26.93, 100.16], name: '바이사고진', cn: '白沙古镇' },
+    { ll: [27.18, 100.12], name: '호도협', cn: '虎跳峡' },
+    { ll: [27.12, 100.23], name: '옥룡설산', cn: '玉龙雪山' },
+    { ll: [27.1294, 100.2419], name: '람월곡', cn: '蓝月谷' },
+    { ll: [26.89, 100.23], name: '흑룡담', cn: '黑龙潭公园' }
+  ]);
+
+  // Guilin
+  makeMap('map-guilin', [25.3, 110.3], 12, [
+    { ll: [25.26, 110.30], name: '상비산', cn: '象鼻山' },
+    { ll: [25.28, 110.30], name: '동서항', cn: '东西巷' },
+    { ll: [25.35, 110.30], name: '죽강부두', cn: '竹江码头' }
+  ]);
+
+  // Yangshuo
+  makeMap('map-yangshuo', [24.83, 110.47], 11, [
+    { ll: [24.77, 110.49], name: '서가', cn: '阳朔西街' },
+    { ll: [24.75, 110.43], name: '위룽허', cn: '遇龙河' },
+    { ll: [24.92, 110.47], name: '상공산', cn: '相公山' },
+    { ll: [24.88, 110.48], name: '싱핑고진', cn: '兴坪古镇' }
+  ]);
+}
+
+// Theme toggle
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('yn3_theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
+}
+// Restore saved theme
+(function() {
+  if (localStorage.getItem('yn3_theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeToggle').textContent = '☀️';
+  }
+})();
+
+// Budget auto-sum
+function calcBudget(tableId, totalId) {
+  const rows = document.querySelectorAll('#' + tableId + ' tr:not(.total)');
+  let sum = 0;
+  rows.forEach(r => {
+    const cell = r.querySelector('td:last-child');
+    if (!cell) return;
+    const n = cell.textContent.replace(/[^0-9]/g, '');
+    if (n) sum += parseInt(n, 10);
+  });
+  const el = document.getElementById(totalId);
+  if (el) el.textContent = '₩' + sum.toLocaleString();
+}
+calcBudget('budgetTableAB', 'totalAB');
+calcBudget('budgetTableC', 'totalC');
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMaps);
+} else {
+  initMaps();
+}
+</script>
+
+</body>
+</html>

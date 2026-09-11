@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>쿤밍→구이린 이동 옵션 비교</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  height:100%;font-family:'Noto Sans KR',sans-serif;
+  background:#0f172a;color:#e2e8f0;overflow-x:hidden;
+}
+.container{max-width:480px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}
+.subtitle{text-align:center;font-size:13px;color:#94a3b8;margin-bottom:24px}
+.section{margin-bottom:28px}
+.section h2{font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px}
+.badge-best{background:rgba(251,191,36,0.15);color:#fbbf24}
+.badge-good{background:rgba(16,185,129,0.15);color:#34d399}
+.badge-bad{background:rgba(239,68,68,0.15);color:#f87171}
+.badge-blue{background:rgba(59,130,246,0.15);color:#60a5fa}
+
+/* Option Card */
+.opt{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;padding:18px;margin-bottom:12px;
+}
+.opt.best{border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.04)}
+.opt-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.opt-name{font-size:16px;font-weight:700}
+.opt-verdict{font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px}
+
+.opt-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.opt-row:last-child{border-bottom:none}
+.opt-label{color:#94a3b8}
+.opt-val{font-weight:600;text-align:right}
+.good{color:#34d399}.warn{color:#fbbf24}.bad{color:#f87171}.blue{color:#60a5fa}
+
+/* Train detail */
+.train-detail{
+  background:rgba(255,255,255,0.04);border-radius:10px;
+  padding:12px;margin-top:10px;
+}
+.train-detail-title{font-size:12px;color:#64748b;font-weight:600;margin-bottom:8px}
+.td-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.td-row .num{font-weight:700;color:#e2e8f0}
+.td-row .time{color:#94a3b8}
+.td-row .price{color:#60a5fa;font-weight:600}
+
+/* Route Visual */
+.route-vis{
+  display:flex;align-items:center;gap:6px;
+  padding:12px 0;justify-content:center;flex-wrap:wrap;
+}
+.rv-city{
+  background:rgba(255,255,255,0.1);border-radius:10px;
+  padding:8px 14px;font-size:13px;font-weight:600;text-align:center;
+}
+.rv-city small{display:block;font-size:10px;color:#94a3b8;font-weight:400;margin-top:2px}
+.rv-city.highlight{background:rgba(251,191,36,0.15);color:#fbbf24}
+.rv-arrow{font-size:11px;color:#64748b}
+
+/* Comparison summary */
+.cmp-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+}
+.cmp-cell{
+  background:rgba(255,255,255,0.04);border-radius:12px;
+  padding:12px 8px;text-align:center;
+}
+.cmp-cell.best-cell{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2)}
+.cmp-cell .label{font-size:10px;color:#64748b;margin-bottom:4px}
+.cmp-cell .val{font-size:18px;font-weight:800}
+.cmp-cell .sub{font-size:11px;color:#94a3b8;margin-top:2px}
+
+/* Links */
+.link-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);
+  border-radius:12px;padding:14px;margin-top:8px;
+  color:#60a5fa;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;
+}
+.link-btn:active{background:rgba(59,130,246,0.25);transform:scale(0.98)}
+.link-btn-sub{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;padding:12px;margin-top:6px;
+  color:#94a3b8;font-size:13px;font-weight:500;text-decoration:none;transition:all .2s;
+}
+.link-btn-sub:active{background:rgba(255,255,255,0.1);transform:scale(0.98)}
+
+.note{
+  background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);
+  border-radius:12px;padding:14px;margin-top:12px;
+  font-size:13px;color:#fbbf24;line-height:1.6;
+}
+.note-green{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.15);color:#34d399}
+.note-red{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.15);color:#f87171}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);margin:24px 0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>쿤밍 → 구이린 이동 옵션</h1>
+<p class="subtitle">직항 기차 · 분할 기차(스탑오버) · 국내선 항공 비교</p>
+
+<!-- ═══════════════════════ -->
+<!-- 한눈에 비교 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2>한눈에 비교</h2>
+  <div class="cmp-grid">
+    <div class="cmp-cell">
+      <div class="label">직통 G열차</div>
+      <div class="val blue">4.5h</div>
+      <div class="sub">≈₩85,000</div>
+    </div>
+    <div class="cmp-cell best-cell">
+      <div class="label">분할 기차</div>
+      <div class="val warn">4.5h</div>
+      <div class="sub">≈₩75,000<br>+ 스탑오버!</div>
+    </div>
+    <div class="cmp-cell">
+      <div class="label">국내선 항공</div>
+      <div class="val bad">1.7h</div>
+      <div class="sub">≈₩380,000</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- OPTION 1: 직통 G열차 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2><span class="badge badge-blue">옵션1</span> 직통 G열차</h2>
+
+  <div class="opt">
+    <div class="route-vis">
+      <div class="rv-city">쿤밍남<small>昆明南</small></div>
+      <div class="rv-arrow">──🚄 직통──→</div>
+      <div class="rv-city">구이린서<small>桂林西</small></div>
+    </div>
+    <div class="opt-row"><span class="opt-label">소요시간</span><span class="opt-val blue">4시간 28분</span></div>
+    <div class="opt-row"><span class="opt-label">2등석</span><span class="opt-val">¥425~453 <small>(≈₩85,000~91,000)</small></span></div>
+    <div class="opt-row"><span class="opt-label">1등석</span><span class="opt-val">¥699~724 <small>(≈₩140,000~145,000)</small></span></div>
+    <div class="opt-row"><span class="opt-label">편수</span><span class="opt-val">하루 2편 (G열차)</span></div>
+    <div class="opt-row"><span class="opt-label">환승</span><span class="opt-val good">없음</span></div>
+
+    <div class="train-detail">
+      <div class="train-detail-title">G열차 시간표</div>
+      <div class="td-row"><span class="num">G2938</span><span class="time">08:24→12:52</span><span class="price">¥425 / ¥699</span></div>
+      <div class="td-row"><span class="num">G910</span><span class="time">09:13→13:41</span><span class="price">¥453 / ¥724</span></div>
+    </div>
+    <div class="train-detail">
+      <div class="train-detail-title">D열차 (느리지만 편수 많음)</div>
+      <div class="td-row"><span class="num">D3904</span><span class="time">09:58→16:37</span><span class="price">¥410 (6h39m)</span></div>
+      <div class="td-row"><span class="num">D3942</span><span class="time">14:59→21:19</span><span class="price">¥407 (6h20m)</span></div>
+      <div class="td-row"><span class="num">D3934</span><span class="time">11:24→18:40</span><span class="price">¥410 (7h16m)</span></div>
+      <div style="font-size:11px;color:#64748b;margin-top:4px;text-align:center">외 D열차 2~3편 더 있음</div>
+    </div>
+  </div>
+
+  <div class="note">
+    ✅ G2938 추천: <strong>오전 08:24 출발 → 점심 12:52 도착</strong>. 이동일에도 오후를 활용 가능. 단, 하루 2편뿐이라 조기 예매 필수.
+  </div>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- OPTION 2: 분할 기차 (스탑오버) -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2><span class="badge badge-best">옵션2 추천</span> 분할 기차 (구이양 스탑오버)</h2>
+
+  <div class="opt best">
+    <div class="route-vis">
+      <div class="rv-city">쿤밍남<small>昆明南</small></div>
+      <div class="rv-arrow">🚄 2.5h →</div>
+      <div class="rv-city highlight">구이양북<small>贵阳北</small><small>스탑오버!</small></div>
+      <div class="rv-arrow">🚄 2h →</div>
+      <div class="rv-city">구이린서<small>桂林西</small></div>
+    </div>
+
+    <div class="opt-row"><span class="opt-label">총 소요시간</span><span class="opt-val warn">4.5~5시간 (환승 포함)</span></div>
+    <div class="opt-row"><span class="opt-label">총 가격 (2등석)</span><span class="opt-val good">¥377~412 <small>(≈₩75,000~82,000)</small></span></div>
+    <div class="opt-row"><span class="opt-label">총 가격 (1등석)</span><span class="opt-val">¥624~646 <small>(≈₩125,000~129,000)</small></span></div>
+    <div class="opt-row"><span class="opt-label">편수</span><span class="opt-val good">각 구간 수십 편 (유연)</span></div>
+    <div class="opt-row"><span class="opt-label">환승</span><span class="opt-val warn">구이양에서 1회</span></div>
+    <div class="opt-row"><span class="opt-label">스탑오버</span><span class="opt-val good">자유롭게 가능!</span></div>
+
+    <div class="train-detail">
+      <div class="train-detail-title">구간1: 쿤밍남 → 구이양북 (약 2.5시간)</div>
+      <div class="td-row"><span class="num">G2832</span><span class="time">07:00→09:33</span><span class="price">¥213 / ¥358</span></div>
+      <div class="td-row"><span class="num">G2938</span><span class="time">08:24→10:59</span><span class="price">¥213 / ¥358</span></div>
+      <div class="td-row"><span class="num">G308</span><span class="time">08:55→11:20</span><span class="price">¥230 / ¥366</span></div>
+      <div style="font-size:11px;color:#64748b;margin-top:4px;text-align:center">하루 70편 이상 운행</div>
+    </div>
+    <div class="train-detail">
+      <div class="train-detail-title">구간2: 구이양동/북 → 구이린서 (약 2시간)</div>
+      <div class="td-row"><span class="num">G1935</span><span class="time">08:10→09:57</span><span class="price">¥164 / ¥263</span></div>
+      <div class="td-row"><span class="num">G3717</span><span class="time">08:40→10:30</span><span class="price">¥164 / ¥263</span></div>
+      <div class="td-row"><span class="num">G3721</span><span class="time">10:33→12:20</span><span class="price">¥182 / ¥280</span></div>
+      <div class="td-row"><span class="num">G3703</span><span class="time">11:26→13:16</span><span class="price">¥175 / ¥280</span></div>
+      <div style="font-size:11px;color:#64748b;margin-top:4px;text-align:center">하루 다수 편 운행</div>
+    </div>
+  </div>
+
+  <div class="note note-green">
+    🎯 <strong>왜 이게 최선인가:</strong><br>
+    · 어차피 <strong>구이양에서 구이저우 관광</strong> (황과수폭포, 시장묘채) 할 예정<br>
+    · 구이양에서 <strong>며칠 스탑오버</strong> 후 구이린으로 이동하면 자연스러운 동선<br>
+    · 직통보다 <strong>¥50~70 저렴</strong> (1인 ≈₩10,000~14,000 절약)<br>
+    · 편수가 많아 <strong>시간 선택 자유로움</strong> (G열차 하루 2편 vs 수십 편)
+  </div>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- OPTION 3: 국내선 항공 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2><span class="badge badge-bad">옵션3</span> 국내선 항공</h2>
+
+  <div class="opt">
+    <div class="route-vis">
+      <div class="rv-city">쿤밍창수이<small>KMG</small></div>
+      <div class="rv-arrow">──✈️──→</div>
+      <div class="rv-city">구이린량장<small>KWL</small></div>
+    </div>
+    <div class="opt-row"><span class="opt-label">비행시간</span><span class="opt-val">1시간 40분</span></div>
+    <div class="opt-row"><span class="opt-label">실제 소요 (공항 포함)</span><span class="opt-val warn">약 4~5시간</span></div>
+    <div class="opt-row"><span class="opt-label">가격</span><span class="opt-val bad">¥1,896+ <small>(≈₩380,000+)</small></span></div>
+    <div class="opt-row"><span class="opt-label">편수</span><span class="opt-val warn">하루 최대 1편</span></div>
+    <div class="opt-row"><span class="opt-label">항공사</span><span class="opt-val">귀린항공(GX) 등</span></div>
+    <div class="opt-row"><span class="opt-label">출발 시간</span><span class="opt-val">10:00 or 22:25</span></div>
+  </div>
+
+  <div class="note note-red">
+    ❌ <strong>비추 이유:</strong><br>
+    · 기차 대비 <strong>4~5배 비쌈</strong> (¥1,896 vs ¥377~453)<br>
+    · 공항 이동 + 체크인 + 보안검색 포함하면 <strong>기차와 총 시간 비슷</strong><br>
+    · 하루 1편뿐이고 편수 불안정<br>
+    · 수하물 제한 더 빡빡
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════ -->
+<!-- 최종 비교 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2>최종 비교표</h2>
+  <div class="opt">
+    <div class="opt-row" style="font-weight:700;color:#64748b;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:8px">
+      <span>항목</span>
+      <span style="display:flex;gap:16px"><span style="width:70px;text-align:center">직통G</span><span style="width:70px;text-align:center;color:#fbbf24">분할🏆</span><span style="width:70px;text-align:center">항공</span></span>
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">이동시간</span>
+      <span style="display:flex;gap:16px"><span style="width:70px;text-align:center;font-weight:600">4.5h</span><span style="width:70px;text-align:center;font-weight:600">4.5~5h</span><span style="width:70px;text-align:center;font-weight:600">4~5h</span></span>
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">2등석/이코</span>
+      <span style="display:flex;gap:16px"><span style="width:70px;text-align:center;font-weight:600">₩85K</span><span style="width:70px;text-align:center;font-weight:600;color:#34d399">₩75K</span><span style="width:70px;text-align:center;font-weight:600;color:#f87171">₩380K</span></span>
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">편수/유연성</span>
+      <span style="display:flex;gap:16px"><span style="width:70px;text-align:center;font-weight:600;color:#fbbf24">2편</span><span style="width:70px;text-align:center;font-weight:600;color:#34d399">수십편</span><span style="width:70px;text-align:center;font-weight:600;color:#f87171">1편</span></span>
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">스탑오버</span>
+      <span style="display:flex;gap:16px"><span style="width:70px;text-align:center;font-weight:600">불가</span><span style="width:70px;text-align:center;font-weight:600;color:#34d399">가능!</span><span style="width:70px;text-align:center;font-weight:600">불가</span></span>
+    </div>
+    <div class="opt-row">
+      <span class="opt-label">추천도</span>
+      <span style="display:flex;gap:16px"><span style="width:70px;text-align:center;font-weight:600">★★★★</span><span style="width:70px;text-align:center;font-weight:600;color:#fbbf24">★★★★★</span><span style="width:70px;text-align:center;font-weight:600;color:#f87171">★</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════ -->
+<!-- 추천 동선 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2>추천 동선 (분할 기차 + 스탑오버)</h2>
+  <div class="opt best">
+    <div class="route-vis">
+      <div class="rv-city">쿤밍<small>2박</small></div>
+      <div class="rv-arrow">🚄 2.5h</div>
+      <div class="rv-city highlight">구이양<small>2~3박</small><small>황과수·묘채</small></div>
+      <div class="rv-arrow">🚄 2h</div>
+      <div class="rv-city">구이린<small>1박</small></div>
+      <div class="rv-arrow">🚌 1h</div>
+      <div class="rv-city">양숴<small>2~3박</small><small>이강유람·휴양</small></div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;text-align:center;margin-top:8px;line-height:1.6">
+      직통 기차를 탈 필요 없이<br>
+      <strong style="color:#fbbf24">구이양에서 자연스럽게 며칠 머물다가</strong><br>
+      구이린으로 이동하면 끝!
+    </p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════ -->
+<!-- 국제선 항공편 현황 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2>✈️ 국제선 항공편 현황 (11월)</h2>
+
+  <div class="opt">
+    <div class="opt-header">
+      <div class="opt-name">3명 출발: 인천→쿤밍</div>
+      <div class="opt-verdict badge-blue">11/7 토</div>
+    </div>
+    <div class="opt-row"><span class="opt-label">중국동방항공</span><span class="opt-val">토 운항 · 직항 ~4.5h</span></div>
+    <div class="opt-row"><span class="opt-label">대한항공</span><span class="opt-val bad">토 미운항</span></div>
+    <div class="opt-row"><span class="opt-label">왕복 평균가</span><span class="opt-val">≈₩520,000</span></div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-header">
+      <div class="opt-name">1명 귀국: 쿤밍→인천</div>
+      <div class="opt-verdict badge-blue">11/14 토</div>
+    </div>
+    <div class="opt-row"><span class="opt-label">중국동방항공</span><span class="opt-val">토 운항 · 직항 ~4.5h</span></div>
+    <div class="opt-row"><span class="opt-label">대한항공</span><span class="opt-val bad">토 미운항</span></div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-header">
+      <div class="opt-name">2명 귀국: 구이린→인천</div>
+      <div class="opt-verdict badge-blue">11/21 토 or 11/22 일</div>
+    </div>
+    <div class="opt-row"><span class="opt-label">제주항공</span><span class="opt-val good">수목토일 운항 · ~3.5h</span></div>
+    <div class="opt-row"><span class="opt-label">진에어</span><span class="opt-val">수토 운항 (10/22~11/29)</span></div>
+    <div class="opt-row"><span class="opt-label">시간대</span><span class="opt-val warn">심야 02:20→07:05</span></div>
+    <div class="opt-row"><span class="opt-label">11/21 (토)</span><span class="opt-val good">제주항공+진에어 운항</span></div>
+    <div class="opt-row"><span class="opt-label">11/22 (일)</span><span class="opt-val warn">제주항공만 운항</span></div>
+  </div>
+
+  <div class="note">
+    ⚠️ 구이린→인천은 <strong>심야편 (새벽 02:20 출발)</strong>이라 마지막 날 밤에 공항으로 가야 함. 귀국일 전날 양숴에서 충분히 쉬고 출발하면 OK.
+  </div>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- 구매 링크 -->
+<!-- ═══════════════════════ -->
+<div class="section">
+  <h2>🎟 예매 링크</h2>
+  <a class="link-btn" href="https://kr.trip.com/trains/china" target="_blank" rel="noopener">🚄 Trip.com 기차표 예매 (한국어)</a>
+  <a class="link-btn-sub" href="https://kyfw.12306.cn/otn/leftTicket/init" target="_blank" rel="noopener">12306 공식 예매 (중국어)</a>
+  <a class="link-btn-sub" href="https://trains.ctrip.com/trainbooking/kunming-guiyang/gaotie/" target="_blank" rel="noopener">Ctrip 쿤밍→구이양 조회</a>
+  <a class="link-btn-sub" href="https://trains.ctrip.com/trainbooking/guiyang-guilin/gaotie/" target="_blank" rel="noopener">Ctrip 구이양→구이린 조회</a>
+  <a class="link-btn-sub" href="https://trains.ctrip.com/trainbooking/kunmingnan-guilin/gaotie/" target="_blank" rel="noopener">Ctrip 쿤밍→구이린 직통 조회</a>
+  <div style="height:12px"></div>
+  <a class="link-btn" href="https://www.kayak.co.kr" target="_blank" rel="noopener">✈️ KAYAK 항공권 검색</a>
+  <a class="link-btn-sub" href="https://kr.trip.com/flights/" target="_blank" rel="noopener">Trip.com 항공권 검색</a>
+
+  <div class="note" style="margin-top:16px">
+    💡 기차표는 <strong>출발 30일 전</strong>부터 예매 가능. 여권번호 필요.<br>
+    💡 11월 항공편은 아직 스케줄 오픈 전일 수 있음 — <strong>2개월 전부터 주기적 확인</strong> 추천.
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:32px;font-size:12px;color:#475569">
+  Last updated: 2026.09.09<br>
+  <span style="opacity:0.5">출처: Ctrip(携程), Trip.com, KAYAK, Expedia · 실제 가격/시간표 변동 가능</span>
+</p>
+
+</div>
+</body>
+</html>

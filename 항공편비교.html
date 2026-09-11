@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>항공편 종합 비교 — 윈난+구이저우 여행</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:'Noto Sans KR',sans-serif;background:#0f172a;color:#e2e8f0;overflow-x:hidden}
+.c{max-width:480px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:22px;font-weight:800;text-align:center;margin-bottom:2px}
+.sub{text-align:center;font-size:12px;color:#64748b;margin-bottom:24px}
+h2{font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec{margin-bottom:32px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);margin:28px 0}
+
+/* badges */
+.b{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap}
+.b-y{background:rgba(251,191,36,0.15);color:#fbbf24}
+.b-g{background:rgba(16,185,129,0.15);color:#34d399}
+.b-r{background:rgba(239,68,68,0.15);color:#f87171}
+.b-b{background:rgba(59,130,246,0.15);color:#60a5fa}
+.b-p{background:rgba(168,85,247,0.15);color:#a78bfa}
+
+/* card */
+.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:10px}
+.card.best{border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.04)}
+.card.warn{border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.03)}
+.card-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card-name{font-size:15px;font-weight:700}
+.row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.row:last-child{border-bottom:none}
+.lbl{color:#94a3b8}.val{font-weight:600;text-align:right}
+.g{color:#34d399}.y{color:#fbbf24}.r{color:#f87171}.bl{color:#60a5fa}
+
+/* route visual */
+.rv{display:flex;align-items:center;gap:4px;padding:10px 0;justify-content:center;flex-wrap:wrap}
+.rv-c{background:rgba(255,255,255,0.1);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-align:center}
+.rv-c small{display:block;font-size:10px;color:#94a3b8;font-weight:400}
+.rv-c.hl{background:rgba(251,191,36,0.15);color:#fbbf24}
+.rv-a{font-size:10px;color:#64748b}
+
+/* alert */
+.alert{border-radius:12px;padding:14px;margin-top:10px;font-size:13px;line-height:1.6}
+.alert-y{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:#fbbf24}
+.alert-g{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);color:#34d399}
+.alert-r{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);color:#f87171}
+
+/* overview grid */
+.og{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.og-cell{background:rgba(255,255,255,0.04);border-radius:12px;padding:14px 10px;text-align:center}
+.og-cell .ol{font-size:10px;color:#64748b;margin-bottom:2px}
+.og-cell .ov{font-size:14px;font-weight:800}
+.og-cell .os{font-size:11px;color:#94a3b8;margin-top:2px}
+
+/* links */
+.lnk{display:flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:13px;margin-top:7px;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
+.lnk:active{transform:scale(0.98)}
+.lnk-p{background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa}
+.lnk-s{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="c">
+
+<h1>항공편 종합 비교</h1>
+<p class="sub">A,B,C 쿤밍 도착 · C 귀국 · A,B 귀국 — 직항/경유 옵션</p>
+
+<!-- ════════════════════ -->
+<!-- 여행 구조 요약 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2>여행 구조</h2>
+  <div class="og">
+    <div class="og-cell"><div class="ol">출발</div><div class="ov">11/7 (토)</div><div class="os">A,B,C 3명</div></div>
+    <div class="og-cell"><div class="ol">도착지</div><div class="ov">쿤밍</div><div class="os">윈난 시작</div></div>
+    <div class="og-cell"><div class="ol">C 귀국</div><div class="ov">11/14~15</div><div class="os">쿤밍→인천</div></div>
+    <div class="og-cell"><div class="ol">A,B 귀국</div><div class="ov">11/20~21</div><div class="os">구이린→인천</div></div>
+  </div>
+  <div class="rv">
+    <div class="rv-c">인천<small>ICN</small></div>
+    <div class="rv-a">✈️→</div>
+    <div class="rv-c hl">쿤밍<small>KMG</small></div>
+    <div class="rv-a">…윈난…</div>
+    <div class="rv-c">쿤밍<small>C 귀국✈️</small></div>
+    <div class="rv-a">🚄→</div>
+    <div class="rv-c">구이양<small>구이저우</small></div>
+    <div class="rv-a">🚄→</div>
+    <div class="rv-c hl">구이린<small>A,B 귀국✈️</small></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════ -->
+<!-- 구간1: 쿤밍 도착 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2><span class="b b-b">구간1</span> 인천→쿤밍 (11/7 토, 3명)</h2>
+
+  <!-- 옵션A: 직항 -->
+  <div class="card best">
+    <div class="card-h">
+      <div class="card-name">쿤밍 직항</div>
+      <span class="b b-y">추천</span>
+    </div>
+    <div class="rv">
+      <div class="rv-c">인천 ICN</div>
+      <div class="rv-a">──✈️ 직항──→</div>
+      <div class="rv-c hl">쿤밍 KMG</div>
+    </div>
+    <div class="row"><span class="lbl">항공사</span><span class="val">중국동방항공 (토 운항)</span></div>
+    <div class="row"><span class="lbl">비행시간</span><span class="val bl">약 4시간 30분</span></div>
+    <div class="row"><span class="lbl">편도 1인</span><span class="val">₩160,000~260,000</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val g">가장 빠르고 편함</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val y">토요일 동방항공 1편뿐</span></div>
+    <div class="alert alert-y">
+      💡 11/7(토)는 <strong>중국동방항공만 직항</strong> 운항. 대한항공은 일/월/수/금. 편수 적으니 일찍 예매 필요.
+    </div>
+  </div>
+
+  <!-- 옵션B: 경유 항공 -->
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">경유 항공편</div>
+      <span class="b b-g">직항 못 잡으면</span>
+    </div>
+    <div class="rv">
+      <div class="rv-c">인천 ICN</div>
+      <div class="rv-a">✈️→</div>
+      <div class="rv-c">상하이/베이징<small>환승 1~3h</small></div>
+      <div class="rv-a">✈️→</div>
+      <div class="rv-c hl">쿤밍 KMG</div>
+    </div>
+    <div class="row"><span class="lbl">항공사</span><span class="val">동방항공, 남방항공, 에어차이나 등</span></div>
+    <div class="row"><span class="lbl">총 소요</span><span class="val">5~8시간 (환승 포함)</span></div>
+    <div class="row"><span class="lbl">편도 1인</span><span class="val g">₩100,000~250,000</span></div>
+    <div class="row"><span class="lbl">경유지</span><span class="val">상하이 PVG / 베이징 PEK / 톈진 TSN</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val g">매일 편수 많고, 가격 저렴할 수 있음</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val y">환승 대기 + 총 시간 늘어남</span></div>
+  </div>
+
+  <!-- 옵션C: 충칭+기차 -->
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">충칭 직항 + 기차</div>
+      <span class="b b-p">스탑오버</span>
+    </div>
+    <div class="rv">
+      <div class="rv-c">인천 ICN</div>
+      <div class="rv-a">✈️4h→</div>
+      <div class="rv-c">충칭 CKG<small>스탑오버 가능!</small></div>
+      <div class="rv-a">🚄5h→</div>
+      <div class="rv-c hl">쿤밍 KMG</div>
+    </div>
+    <div class="row"><span class="lbl">항공사</span><span class="val">아시아나, 에어차이나 (거의 매일)</span></div>
+    <div class="row"><span class="lbl">비행</span><span class="val">약 4시간</span></div>
+    <div class="row"><span class="lbl">기차</span><span class="val">약 5시간 (¥200~300 ≈₩40K~60K)</span></div>
+    <div class="row"><span class="lbl">항공 편도 1인</span><span class="val">₩130,000~400,000</span></div>
+    <div class="row"><span class="lbl">총 비용</span><span class="val">₩170,000~460,000</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val g">충칭 훠궈! 항공편 다양</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val r">기차 5시간 추가, 여행일 1일 소모</span></div>
+    <div class="alert alert-y">
+      🍲 충칭에서 1박 하면 <strong>훠궈 + 홍야동 야경</strong> 즐기고 다음날 쿤밍 이동 가능. 단, 전체 여행일 1일 소모.
+    </div>
+  </div>
+
+  <!-- 옵션D: 광저우+기차 -->
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">광저우 직항 + 기차</div>
+      <span class="b b-r">비추</span>
+    </div>
+    <div class="rv">
+      <div class="rv-c">인천 ICN</div>
+      <div class="rv-a">✈️4h→</div>
+      <div class="rv-c">광저우 CAN</div>
+      <div class="rv-a">🚄6.7h→</div>
+      <div class="rv-c hl">쿤밍 KMG</div>
+    </div>
+    <div class="row"><span class="lbl">항공사</span><span class="val">대한항공, 아시아나, 남방항공 등</span></div>
+    <div class="row"><span class="lbl">비행</span><span class="val">약 4시간</span></div>
+    <div class="row"><span class="lbl">기차</span><span class="val r">약 6시간 40분 (¥443 ≈₩90K)</span></div>
+    <div class="row"><span class="lbl">항공 편도 1인</span><span class="val">₩140,000~300,000</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val">항공편 매일 다수 (선택지 최다)</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val r">기차 6.7시간 너무 김</span></div>
+  </div>
+
+  <!-- 옵션E: 구이린+기차 -->
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">구이린 직항(심야) + 기차</div>
+      <span class="b b-r">비추</span>
+    </div>
+    <div class="rv">
+      <div class="rv-c">인천 ICN<small>22:20 출발</small></div>
+      <div class="rv-a">✈️3.5h→</div>
+      <div class="rv-c">구이린 KWL<small>01:20 도착</small></div>
+      <div class="rv-a">🚄4.5h→</div>
+      <div class="rv-c hl">쿤밍 KMG</div>
+    </div>
+    <div class="row"><span class="lbl">항공사</span><span class="val">제주항공 (수목토일), 진에어 (수토)</span></div>
+    <div class="row"><span class="lbl">비행</span><span class="val">약 3.5시간 (심야편)</span></div>
+    <div class="row"><span class="lbl">기차</span><span class="val">G열차 약 4.5시간 (¥425 ≈₩85K)</span></div>
+    <div class="row"><span class="lbl">항공 편도 1인</span><span class="val g">₩100,000~200,000</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val r">새벽 1시 도착 → 다음날 기차 → 여행일 2일 소모</span></div>
+    <div class="alert alert-r">
+      ⚠️ 새벽 도착이라 공항 근처에서 자고 다음날 기차 타야 함. <strong>엄마와 동행 시 피로도 높음.</strong> 11/7 야간 출발 → 11/8 새벽 도착 → 11/8 오후 기차 → 11/8 밤 쿤밍.
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════ -->
+<!-- 구간2: C 귀국 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2><span class="b b-b">구간2</span> C 귀국: 쿤밍→인천</h2>
+
+  <div class="og">
+    <div class="og-cell"><div class="ol">11/14 (토)</div><div class="ov g">직항 O</div><div class="os">동방항공</div></div>
+    <div class="og-cell"><div class="ol">11/15 (일)</div><div class="ov g">직항 O</div><div class="os">대한항공</div></div>
+  </div>
+
+  <div class="card best">
+    <div class="card-h">
+      <div class="card-name">쿤밍→인천 직항</div>
+      <span class="b b-y">추천</span>
+    </div>
+    <div class="row"><span class="lbl">비행시간</span><span class="val bl">약 4시간 30분</span></div>
+    <div class="row"><span class="lbl">편도 1인</span><span class="val">₩160,000~300,000</span></div>
+    <div class="row"><span class="lbl">11/14 (토)</span><span class="val g">동방항공 ✅</span></div>
+    <div class="row"><span class="lbl">11/15 (일)</span><span class="val g">대한항공 ✅</span></div>
+    <div class="alert alert-g">
+      ✅ <strong>양일 모두 직항 가능!</strong> C가 편한 날짜 선택하면 됨.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">쿤밍→인천 경유</div>
+      <span class="b b-g">대안</span>
+    </div>
+    <div class="row"><span class="lbl">경유지</span><span class="val">상하이 PVG / 베이징 PEK 등</span></div>
+    <div class="row"><span class="lbl">총 소요</span><span class="val">6~10시간</span></div>
+    <div class="row"><span class="lbl">편도 1인</span><span class="val g">₩100,000~200,000</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val g">가격 저렴, 매일 편수 많음</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val y">환승 대기 시간</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════ -->
+<!-- 구간3: A,B 귀국 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2><span class="b b-b">구간3</span> A,B 귀국: 구이린→인천</h2>
+
+  <div class="og">
+    <div class="og-cell" style="border:1px solid rgba(239,68,68,0.2)"><div class="ol">11/20 (금)</div><div class="ov r">직항 X</div><div class="os">수목토일만 운항</div></div>
+    <div class="og-cell" style="border:1px solid rgba(16,185,129,0.2)"><div class="ol">11/21 (토)</div><div class="ov g">직항 O</div><div class="os">제주항공+진에어</div></div>
+  </div>
+
+  <div class="card warn">
+    <div class="card-h">
+      <div class="card-name">11/20 (금) 귀국 시</div>
+      <span class="b b-r">직항 없음!</span>
+    </div>
+    <div class="row"><span class="lbl">직항</span><span class="val r">운항 안 함 (수목토일만)</span></div>
+    <div class="row"><span class="lbl">경유 항공</span><span class="val y">광저우/상하이 경유 6~12시간</span></div>
+    <div class="row"><span class="lbl">경유 가격</span><span class="val">₩150,000~300,000</span></div>
+    <div class="alert alert-r">
+      ⚠️ 11/20(금)은 구이린→인천 <strong>직항편이 없습니다.</strong> 경유편만 가능하고 시간도 오래 걸림.
+    </div>
+  </div>
+
+  <div class="card best">
+    <div class="card-h">
+      <div class="card-name">11/21 (토) 귀국</div>
+      <span class="b b-y">추천</span>
+    </div>
+    <div class="row"><span class="lbl">제주항공</span><span class="val g">토 운항 ✅</span></div>
+    <div class="row"><span class="lbl">진에어</span><span class="val g">토 운항 ✅ (10/22~11/29)</span></div>
+    <div class="row"><span class="lbl">출발 시간</span><span class="val y">구이린 02:20 (심야)</span></div>
+    <div class="row"><span class="lbl">도착 시간</span><span class="val">인천 07:05</span></div>
+    <div class="row"><span class="lbl">비행시간</span><span class="val bl">약 3시간 30분</span></div>
+    <div class="row"><span class="lbl">편도 1인</span><span class="val">₩100,000~200,000</span></div>
+    <div class="alert alert-y">
+      ⚠️ 심야편 (새벽 02:20 출발)이라 <strong>11/20 밤에 공항으로 이동</strong>해야 함. 11/20 저녁에 양숴에서 출발하면 됨.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">구이린→인천 경유</div>
+      <span class="b b-g">11/20도 가능</span>
+    </div>
+    <div class="row"><span class="lbl">항공사</span><span class="val">동방항공, 에어차이나, 남방항공 등</span></div>
+    <div class="row"><span class="lbl">경유지</span><span class="val">광저우 CAN / 상하이 PVG 등</span></div>
+    <div class="row"><span class="lbl">총 소요</span><span class="val">6~12시간</span></div>
+    <div class="row"><span class="lbl">편도 1인</span><span class="val">₩150,000~300,000</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val g">11/20(금)도 가능, 주간 출발</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val y">환승 시간 + 직항 대비 비쌈</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════ -->
+<!-- 추천 조합 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2>추천 항공편 조합</h2>
+
+  <div class="card best">
+    <div class="card-h">
+      <div class="card-name">조합 A: 전부 직항</div>
+      <span class="b b-y">최편리</span>
+    </div>
+    <div class="row"><span class="lbl">A,B,C 출발</span><span class="val">11/7(토) 인천→쿤밍 <strong>동방항공</strong></span></div>
+    <div class="row"><span class="lbl">C 귀국</span><span class="val">11/14(토) 쿤밍→인천 <strong>동방항공</strong></span></div>
+    <div class="row"><span class="lbl">A,B 귀국</span><span class="val">11/21(토) 구이린→인천 <strong>제주항공</strong></span></div>
+    <div class="row"><span class="lbl">모든 사람</span><span class="val g">비행기 2번씩, 전부 직항</span></div>
+    <div class="row"><span class="lbl">예상 총 비용</span><span class="val bl">1인 ₩320K~560K</span></div>
+    <div class="alert alert-g">
+      ✅ <strong>가장 깔끔한 조합.</strong> 동방항공 쿤밍 직항만 일찍 잡으면 됨.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">조합 B: 경유로 가격 절약</div>
+      <span class="b b-g">최저가</span>
+    </div>
+    <div class="row"><span class="lbl">A,B,C 출발</span><span class="val">11/7(토) 인천→<strong>상하이 경유</strong>→쿤밍</span></div>
+    <div class="row"><span class="lbl">C 귀국</span><span class="val">11/14(토) 쿤밍→인천 직항 or 경유</span></div>
+    <div class="row"><span class="lbl">A,B 귀국</span><span class="val">11/21(토) 구이린→인천 <strong>제주항공</strong></span></div>
+    <div class="row"><span class="lbl">예상 총 비용</span><span class="val g">1인 ₩200K~450K</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <div class="card-name">조합 C: 충칭 스탑오버</div>
+      <span class="b b-p">충칭 보너스</span>
+    </div>
+    <div class="row"><span class="lbl">A,B,C 출발</span><span class="val">11/7(토) 인천→<strong>충칭</strong> 직항</span></div>
+    <div class="row"><span class="lbl">충칭→쿤밍</span><span class="val">11/8(일) 🚄 5시간</span></div>
+    <div class="row"><span class="lbl">C 귀국</span><span class="val">11/14(토) 쿤밍→인천</span></div>
+    <div class="row"><span class="lbl">A,B 귀국</span><span class="val">11/21(토) 구이린→인천</span></div>
+    <div class="row"><span class="lbl">장점</span><span class="val g">충칭 훠궈 + 항공편 풍부</span></div>
+    <div class="row"><span class="lbl">단점</span><span class="val y">여행일 1일 소모, 기차 5시간</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════ -->
+<!-- 핵심 날짜별 운항 요약 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2>날짜별 직항 운항 요약</h2>
+  <div class="card">
+    <div class="row" style="font-weight:700;color:#64748b;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:6px">
+      <span>날짜</span><span style="text-align:right">직항 상황</span>
+    </div>
+    <div class="row"><span class="lbl">11/7 (토) ICN→KMG</span><span class="val y">동방항공 1편</span></div>
+    <div class="row"><span class="lbl">11/14 (토) KMG→ICN</span><span class="val g">동방항공 1편</span></div>
+    <div class="row"><span class="lbl">11/15 (일) KMG→ICN</span><span class="val g">대한항공 1편</span></div>
+    <div class="row"><span class="lbl">11/20 (금) KWL→ICN</span><span class="val r">직항 없음 ❌</span></div>
+    <div class="row"><span class="lbl">11/21 (토) KWL→ICN</span><span class="val g">제주항공+진에어 (심야)</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════ -->
+<!-- 예매 링크 -->
+<!-- ════════════════════ -->
+<div class="sec">
+  <h2>예매 링크</h2>
+  <a class="lnk lnk-p" href="https://www.kayak.co.kr" target="_blank">✈️ KAYAK 항공권 검색</a>
+  <a class="lnk lnk-s" href="https://kr.trip.com/flights/" target="_blank">Trip.com 항공권</a>
+  <a class="lnk lnk-s" href="https://www.skyscanner.co.kr/" target="_blank">스카이스캐너</a>
+  <a class="lnk lnk-s" href="https://www.jejuair.net/ko/ibe/booking/Availability.do" target="_blank">제주항공 예매</a>
+  <a class="lnk lnk-s" href="https://www.jinair.com/booking/index" target="_blank">진에어 예매</a>
+  <a class="lnk lnk-s" href="https://www.koreanair.com/" target="_blank">대한항공</a>
+  <a class="lnk lnk-s" href="https://www.ceair.com/" target="_blank">중국동방항공</a>
+  <div style="height:8px"></div>
+  <a class="lnk lnk-p" href="https://kr.trip.com/trains/china" target="_blank">🚄 Trip.com 기차표 예매</a>
+  <a class="lnk lnk-s" href="https://kyfw.12306.cn/otn/leftTicket/init" target="_blank">12306 공식 (중국 기차)</a>
+
+  <div class="alert alert-y" style="margin-top:16px">
+    💡 <strong>팁:</strong><br>
+    · 11월 항공편은 <strong>2개월 전부터 주기적 확인</strong> 추천<br>
+    · 쿤밍 직항은 <strong>편수 적으니 보이면 바로 예매</strong><br>
+    · 구이린 직항은 11월 운항 <strong>허가 진행 중</strong> — 확정 후 예매<br>
+    · 기차표는 <strong>출발 30일 전</strong> 예매 오픈
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:28px;font-size:11px;color:#475569">
+  Last updated: 2026.09.09<br>
+  <span style="opacity:0.5">출처: KAYAK, Trip.com, Skyscanner, Ctrip, 각 항공사 · 가격/스케줄 변동 가능</span>
+</p>
+
+</div>
+</body>
+</html>
