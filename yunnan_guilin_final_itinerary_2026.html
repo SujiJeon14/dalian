@@ -1215,6 +1215,7 @@ body.light .notice-box b{color:#b45309}
       <div class="day-date">11월 14일 (토) — 15일 (일)</div>
       <div class="day-hotel-badge">👋 리장→쿤밍 · 일행 배웅</div>
     </div>
+    <div class="day-map" id="map-split"></div>
 
     <div class="section-day-label">DAY 8 · 11/14 토 · 흑룡담 + 리장→쿤밍</div>
     <div class="timeline">
@@ -2194,6 +2195,14 @@ function initMaps() {
   ]);
 
   // Guilin
+  // Day 8-9: 이동+분리
+  makeMap('map-split', [25.5, 101.8], 7, [
+    { ll: [26.8894, 100.2272], name: '흑룡담', cn: '黑龙潭公园' },
+    { ll: [26.8721, 100.2260], name: '리장역', cn: '丽江站' },
+    { ll: [25.1019, 102.9292], name: '쿤밍 공항', cn: '昆明长水国际机场' },
+    { ll: [24.9186, 102.7583], name: '쿤밍남역', cn: '昆明南站' }
+  ]);
+
   makeMap('map-guilin', [25.3, 110.3], 12, [
     { ll: [25.26, 110.30], name: '상비산', cn: '象鼻山' },
     { ll: [25.28, 110.30], name: '동서항', cn: '东西巷' },
