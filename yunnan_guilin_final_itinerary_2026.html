@@ -2125,8 +2125,9 @@ document.querySelectorAll('.checklist input').forEach((cb, i) => {
 
 // -- Leaflet Maps --
 function initMaps() {
-  const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+  // Wikimedia 타일: 로컬 file://에서도 CORS 허용, API 키 불필요
+  const tileUrl = 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png';
+  const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use">Wikimedia</a>';
   const markerIcon = L.divIcon({
     className: '',
     html: '<div style="width:12px;height:12px;background:#f59e0b;border:2px solid #fff;border-radius:50%;box-shadow:0 0 6px rgba(245,158,11,0.6)"></div>',
@@ -2143,7 +2144,7 @@ function initMaps() {
       dragging: true,
       scrollWheelZoom: false
     }).setView(center, zoom);
-    L.tileLayer(tileUrl, { attribution: tileAttr, subdomains: 'abc', maxZoom: 18, crossOrigin: true }).addTo(map);
+    L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
     markers.forEach(m => {
       const mapLink = 'https://www.google.com/maps/search/' + encodeURIComponent(m.cn || m.name) + '/@' + m.ll[0] + ',' + m.ll[1] + ',14z';
       L.marker(m.ll, { icon: markerIcon }).addTo(map).bindPopup(
