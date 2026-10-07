@@ -429,6 +429,34 @@ body.light .budget-note{background:rgba(217,119,6,0.06);border-color:rgba(217,11
 }
 .notice-box b{color:#fbbf24}
 
+/* Accommodation Detail Cards */
+.accom-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;padding:16px;
+  margin-bottom:10px;
+  position:relative;
+}
+.accom-card .accom-status{
+  position:absolute;top:14px;right:14px;
+  font-size:10px;font-weight:700;
+  background:rgba(16,185,129,0.2);color:#34d399;
+  padding:2px 8px;border-radius:6px;
+}
+.accom-card .accom-name{font-size:15px;font-weight:700;margin-bottom:2px;padding-right:70px}
+.accom-card .accom-dates{font-size:12px;color:#fbbf24;font-weight:600;margin-bottom:6px}
+.accom-card .accom-room{font-size:12px;color:#94a3b8;line-height:1.5;margin-bottom:6px}
+.accom-card .accom-amenities{font-size:11px;color:#64748b;margin-bottom:8px}
+.accom-card .accom-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);
+  font-size:12px;
+}
+.accom-card .accom-price{font-weight:700;color:#34d399}
+.accom-card .accom-booking{font-size:11px;color:#64748b}
+body.light .accom-card{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.08)}
+body.light .accom-card .accom-status{background:rgba(16,185,129,0.12)}
+
 /* Leaflet overrides */
 .leaflet-tile-pane{filter:brightness(0.7) contrast(1.1) saturate(0.8)}
 body.light .leaflet-tile-pane{filter:none}
@@ -605,7 +633,7 @@ body.light .notice-box b{color:#b45309}
       <div class="day-num">DAY 1-2</div>
       <div class="day-title">쿤밍 昆明</div>
       <div class="day-date">11월 7일 (토) — 8일 (일)</div>
-      <div class="day-hotel-badge">🌸 취호공원–난핑제–쿤밍라오제 권역</div>
+      <div class="day-hotel-badge">🏨 Yeshijie Hotel · 2박 예약 완료</div>
     </div>
     <div class="day-map" id="map-kunming"></div>
 
@@ -637,9 +665,14 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon hotel">🏨</div>
           <div class="sched-body">
-            <div class="sched-time">13:30–14:30</div>
-            <div class="sched-title">체크인 또는 짐 보관 · 늦은 점심</div>
-            <span class="sched-tag tag-hotel">숙소</span>
+            <div class="sched-time">15:00 이후 체크인</div>
+            <div class="sched-title"><a href="https://kr.trip.com/hotels/kunming-hotel-detail-110034543/xie-shi-jie-gong-yu/" target="_blank" rel="noopener">Yeshijie Hotel</a> 체크인 · 짐 보관 · 늦은 점심</div>
+            <div class="sched-desc">패밀리 환영 스위트 · 퀸침대 3개 · 137㎡ · 25층<br><span style="font-size:11px;color:#64748b">빈장준위안 2기 13동 1607호 · 📞 +86-15087168589</span></div>
+            <div class="cn-name" onclick="copyText('叶视界公寓(昆明滨江俊园店)')">
+              <span class="cn-text">叶视界公寓（昆明滨江俊园店）</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-hotel">숙소</span>
           </div>
         </div>
       </div>
@@ -649,7 +682,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🌿</div>
           <div class="sched-body">
             <div class="sched-time">15:30–17:00</div>
-            <div class="sched-title">취호공원</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/kunming/the-green-lake-park-78617/" target="_blank" rel="noopener">취호공원</a></div>
             <div class="sched-desc">쿤밍 시내 중심의 아름다운 호수 공원</div>
             <div class="sched-fee">🎟 무료</div>
             <div class="cn-name" onclick="copyText('翠湖公园')">
@@ -693,7 +726,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏮</div>
           <div class="sched-body">
             <div class="sched-time">19:30–21:30</div>
-            <div class="sched-title">쿤밍라오제 · 난핑제 야경</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/kunming/old-street-kunming-56776277/" target="_blank" rel="noopener">쿤밍라오제</a> · <a href="https://kr.trip.com/travel-guide/attraction/kunming/nanping-pedestrian-street-10537900/" target="_blank" rel="noopener">난핑제</a> 야경</div>
             <div class="cn-name" onclick="copyText('昆明老街')">
               <span class="cn-text">昆明老街</span>
               <span class="cn-copy">📋</span>
@@ -740,7 +773,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🪨</div>
           <div class="sched-body">
             <div class="sched-time">09:30–12:00</div>
-            <div class="sched-title">석림풍경명승구</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/shilin/stone-forest-scenic-area-82204/" target="_blank" rel="noopener">석림풍경명승구</a></div>
             <div class="sched-desc">2.7억년 카르스트 지형, 유네스코 세계유산. 대석림/핵심 구역 위주</div>
             <div class="sched-fee">🎟 ¥130 + 전동차 ¥25</div>
             <div class="cn-name" onclick="copyText('石林风景名胜区')">
@@ -773,7 +806,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🕳️</div>
           <div class="sched-body">
             <div class="sched-time">14:00–16:30</div>
-            <div class="sched-title">구향동굴</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yiliang/jiuxiang-scenic-area-78616/" target="_blank" rel="noopener">구향동굴</a></div>
             <div class="sched-desc">동굴·지하강·폭포 관람. 계단과 보행 구간이 있으므로 편한 운동화 착용</div>
             <div class="cn-name" onclick="copyText('九乡风景区')">
               <span class="cn-text">九乡风景区</span>
@@ -824,7 +857,7 @@ body.light .notice-box b{color:#b45309}
       <div class="day-num">DAY 3-4</div>
       <div class="day-title">다리 大理</div>
       <div class="day-date">11월 9일 (월) — 10일 (화)</div>
-      <div class="day-hotel-badge">🌊 다리고성 동문–얼하이문 바깥</div>
+      <div class="day-hotel-badge">🏨 Dali Sheyu Secret Garden Inn · 2박 예약 완료</div>
     </div>
     <div class="day-map" id="map-dali"></div>
 
@@ -836,7 +869,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon hotel">☕</div>
           <div class="sched-body">
             <div class="sched-time">06:30</div>
-            <div class="sched-title">기상 · 조식 · 체크아웃</div>
+            <div class="sched-title">기상 · 조식 · Yeshijie 체크아웃 (12:00 이전)</div>
             <span class="sched-tag tag-hotel">숙소</span>
           </div>
         </div>
@@ -864,7 +897,7 @@ body.light .notice-box b{color:#b45309}
 
       <div class="transit">
         <div class="transit-icon">🚗</div>
-        <div class="transit-info">역 → 숙소 · <span class="t-dur">DiDi 약 20분</span></div>
+        <div class="transit-info">역 → Sheyu Secret Garden Inn 체크인 (14:00~) · <span class="t-dur">DiDi 약 20분</span></div>
       </div>
 
       <div class="sched">
@@ -872,7 +905,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏛️</div>
           <div class="sched-body">
             <div class="sched-time">13:30–16:30</div>
-            <div class="sched-title">숭성사 삼탑</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/dali-city/the-chongsheng-temple-and-the-three-pagoda-culture-tourist-area-75915/" target="_blank" rel="noopener">숭성사 삼탑</a></div>
             <div class="sched-desc">다리의 상징, 천 년 역사의 불교 유적</div>
             <div class="cn-name" onclick="copyText('崇圣寺三塔')">
               <span class="cn-text">崇圣寺三塔</span>
@@ -888,7 +921,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏘️</div>
           <div class="sched-body">
             <div class="sched-time">17:00–21:00</div>
-            <div class="sched-title">다리고성 산책 · 저녁 · 야경</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/dali/dali-ancient-city-78629/" target="_blank" rel="noopener">다리고성</a> 산책 · 저녁 · 야경</div>
             <div class="sched-desc">600년 역사의 바이족 고성. 골목 탐방, 소품숍, 간식거리</div>
             <div class="sched-fee">🎟 무료</div>
             <div class="cn-name" onclick="copyText('大理古城')">
@@ -910,7 +943,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏘️</div>
           <div class="sched-body">
             <div class="sched-time">08:30–11:00</div>
-            <div class="sched-title">시저우고진</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/dali-city/xizhou-78630/" target="_blank" rel="noopener">시저우고진</a></div>
             <div class="sched-desc">바이족 전통가옥 마을. 시저우바바(喜洲粑粑) 꼭 맛보기!</div>
             <div class="sched-fee">🎟 무료</div>
             <div class="cn-name" onclick="copyText('喜洲古镇')">
@@ -927,7 +960,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🌊</div>
           <div class="sched-body">
             <div class="sched-time">12:30–17:00</div>
-            <div class="sched-title">얼하이 생태회랑</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/dali-city/erhai-lake-75916/" target="_blank" rel="noopener">얼하이 생태회랑</a></div>
             <div class="sched-desc">자전거 또는 전동차로 호수 일주! 절경 포인트마다 사진 촬영</div>
             <div class="cn-name" onclick="copyText('洱海生态廊道')">
               <span class="cn-text">洱海生态廊道</span>
@@ -958,7 +991,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon food">🍽️</div>
           <div class="sched-body">
             <div class="sched-time">19:00~</div>
-            <div class="sched-title">다리고성 귀환 · 바이족 요리</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/dali/dali-ancient-city-78629/" target="_blank" rel="noopener">다리고성</a> 귀환 · 바이족 요리</div>
             <div class="sched-desc">다리 특색 바이족 전통 요리</div>
             <div class="cn-name" onclick="copyText('白族菜')">
               <span class="cn-text">白族菜</span>
@@ -979,7 +1012,7 @@ body.light .notice-box b{color:#b45309}
       <div class="day-num">DAY 5-7</div>
       <div class="day-title">리장 丽江</div>
       <div class="day-date">11월 11일 (수) — 13일 (금)</div>
-      <div class="day-hotel-badge">🏮 Yidou Hotel (충의시장·목부점) 3박 고정</div>
+      <div class="day-hotel-badge">🏨 Yidou Hotel (충의시장·목부점) 3박 예약 완료</div>
     </div>
     <div class="day-map" id="map-lijiang"></div>
 
@@ -1006,9 +1039,9 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon hotel">🏨</div>
           <div class="sched-body">
-            <div class="sched-time">10:00 전후</div>
-            <div class="sched-title">Yidou 역 픽업 이용 → 숙소 · 짐 보관</div>
-            <div class="sched-desc">3박 연박 시 제공되는 역 픽업은 <b>하루 전까지 사전 신청</b></div>
+            <div class="sched-time">10:00 전후 (체크인 14:00~)</div>
+            <div class="sched-title"><a href="https://kr.trip.com/hotels/lijiang-hotel-detail-125335048/yidou-hotel/" target="_blank" rel="noopener">Yidou</a> 역 픽업 이용 → 숙소 · 짐 보관</div>
+            <div class="sched-desc">3박 연박 역 픽업 <b>하루 전까지 사전 신청</b> (📞 +86-13378887967)<br><span style="font-size:11px;color:#34d399">조식 포함 · 아메리카노 무제한 · 라파이구 훠궈 15%↓ 쿠폰</span></div>
             <div class="cn-name" onclick="copyText('一兜酒店丽江古城忠义市场木府店')">
               <span class="cn-text">一兜酒店（丽江古城忠义市场木府店）</span>
               <span class="cn-copy">📋</span>
@@ -1023,7 +1056,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏘️</div>
           <div class="sched-body">
             <div class="sched-time">13:00–15:30</div>
-            <div class="sched-title">바이사고진</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/lijiang/baisha-ancient-town-80044/" target="_blank" rel="noopener">바이사고진</a></div>
             <div class="sched-desc">리장에서 가장 오래된 나시족 마을. 바이사 벽화 유명</div>
             <div class="cn-name" onclick="copyText('白沙古镇')">
               <span class="cn-text">白沙古镇</span>
@@ -1039,7 +1072,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏮</div>
           <div class="sched-body">
             <div class="sched-time">17:30–21:00</div>
-            <div class="sched-title">리장고성 · 사방가 · 야경</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/lijiang/old-town-of-lijiang-75924/" target="_blank" rel="noopener">리장고성</a> · 사방가 · 야경</div>
             <div class="sched-desc">800년 나시족 고성의 화려한 밤</div>
             <div class="cn-name" onclick="copyText('丽江古城')">
               <span class="cn-text">丽江古城</span>
@@ -1098,7 +1131,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon hike">⛰️</div>
           <div class="sched-body">
             <div class="sched-time">11:20–13:50</div>
-            <div class="sched-title">차마객잔 → 중도객잔 핵심 트레킹</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/shangri-la/shangri-la-tiger-leaping-gorge-10558694/" target="_blank" rel="noopener">호도협</a> 핵심 트레킹 · 차마→중도</div>
             <div class="sched-desc">28굽이 오르막은 제외. 차마→중도 핵심 구간만 도보. 난이도 ★★★☆☆</div>
             <div class="cn-name" onclick="copyText('中途客栈')">
               <span class="cn-text">中途客栈 (Halfway Guesthouse)</span>
@@ -1125,7 +1158,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🌊</div>
           <div class="sched-body">
             <div class="sched-time">15:20–16:20</div>
-            <div class="sched-title">상호도협 메인 전망 구간</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/shangri-la/shanghutiao-canyon-69342535/" target="_blank" rel="noopener">상호도협</a> 메인 전망 구간</div>
             <div class="sched-desc">기사 픽업 후 차량 이동, 상호도협 관람</div>
             <div class="cn-name" onclick="copyText('上虎跳峡')">
               <span class="cn-text">上虎跳峡</span>
@@ -1194,7 +1227,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏔️</div>
           <div class="sched-body">
             <div class="sched-time">08:30 출발</div>
-            <div class="sched-title">Yidou 출발 → 옥룡설산 관광지</div>
+            <div class="sched-title">Yidou 출발 → <a href="https://kr.trip.com/travel-guide/attraction/lijiang/yulong-snow-mountain-75919/" target="_blank" rel="noopener">옥룡설산</a> 관광지</div>
             <div class="sched-desc">관광지 입장 · 셔틀 이동 · 선택한 삭도 시간에 맞춰 이동</div>
             <div class="cn-name" onclick="copyText('玉龙雪山')">
               <span class="cn-text">玉龙雪山</span>
@@ -1210,7 +1243,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🐂</div>
           <div class="sched-body">
             <div class="sched-time">10:00–12:30</div>
-            <div class="sched-title">1순위: 모우평 · 넓은 고산초원과 옥룡설산 파노라마</div>
+            <div class="sched-title">1순위: <a href="https://kr.trip.com/travel-guide/attraction/yulong/maoniuping-94940/" target="_blank" rel="noopener">모우평</a> · 넓은 고산초원과 옥룡설산 파노라마</div>
             <div class="sched-desc"><b>대안: 운삼평</b> — 숲+초원 조망, 모우평보다 고도 부담이 낮아 전날 호도협 피로가 남을 때 적합</div>
             <div class="cn-name" onclick="copyText('牦牛坪')">
               <span class="cn-text">牦牛坪</span>
@@ -1241,7 +1274,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">💎</div>
           <div class="sched-body">
             <div class="sched-time">13:30–15:40</div>
-            <div class="sched-title">람월곡 호수 산책</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yulong/blue-moon-valley-91410/" target="_blank" rel="noopener">람월곡</a> 호수 산책</div>
             <div class="sched-desc">에메랄드빛 호수와 계곡. 전동차는 체력에 따라 선택</div>
             <div class="cn-name" onclick="copyText('蓝月谷')">
               <span class="cn-text">蓝月谷</span>
@@ -1257,7 +1290,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">📸</div>
           <div class="sched-body">
             <div class="sched-time">15:50–16:20</div>
-            <div class="sched-title">감해자 · 설산 전경/사진</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yulong/gan-haizi-75920/" target="_blank" rel="noopener">감해자</a> · 설산 전경/사진</div>
             <div class="cn-name" onclick="copyText('甘海子')">
               <span class="cn-text">甘海子</span>
               <span class="cn-copy">📋</span>
@@ -1330,7 +1363,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🌊</div>
           <div class="sched-body">
             <div class="sched-time">08:30–10:00</div>
-            <div class="sched-title">흑룡담공원</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/lijiang/heilongtan-park-75925/" target="_blank" rel="noopener">흑룡담공원</a></div>
             <div class="sched-desc">옥룡설산이 호수에 비치는 절경 포인트</div>
             <div class="cn-name" onclick="copyText('黑龙潭公园')">
               <span class="cn-text">黑龙潭公园</span>
@@ -1346,7 +1379,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏮</div>
           <div class="sched-body">
             <div class="sched-time">10:15–11:30</div>
-            <div class="sched-title">리장고성 마지막 산책 / 목부 선택</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/lijiang/old-town-of-lijiang-75924/" target="_blank" rel="noopener">리장고성</a> 마지막 산책 / 목부 선택</div>
             <span class="sched-tag tag-spot">산책</span>
           </div>
         </div>
@@ -1374,9 +1407,9 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-body">
             <div class="sched-time">18:30~20:00</div>
             <div class="sched-title">쿤밍 도착 · 화룽 디자이너 홈스테이 체크인 · 저녁</div>
-            <div class="sched-desc">체크인 14:00 이후 · 11/16 12:00 이전 체크아웃 · 2박 연박</div>
+            <div class="sched-desc">체크인 14:00~ · 체크아웃 11/16 12:00 · 레이크뷰 · 식사 불포함<br><span style="font-size:11px;color:#64748b">📞 +86-15368863966 / +86-13313325686</span></div>
             <div class="cn-name" onclick="copyText('花容设计师酒店(昆明南站七彩云南第壹城店)')">
-              <span class="cn-text">花容设计师酒店(昆明南站七彩云南第壹城店)</span>
+              <span class="cn-text">花容设计师酒店（昆明南站七彩云南第壹城店）</span>
               <span class="cn-copy">📋</span>
             </div>
             <br><span class="sched-tag tag-hotel">숙소</span>
@@ -1399,7 +1432,7 @@ body.light .notice-box b{color:#b45309}
       <div class="tl-item">
         <div class="tl-time">08:45</div>
         <div class="tl-content">
-          <div class="tl-title">두난 꽃시장</div>
+          <div class="tl-title"><a href="https://kr.trip.com/travel-guide/attraction/kunming/dounan-flower-fair-62869851/" target="_blank" rel="noopener">두난 꽃시장</a></div>
           <div class="tl-desc">C와 함께 꽃시장 분위기 가볍게 구경</div>
           <div class="cn-name" onclick="copyText('斗南花卉市场')" style="margin-top:4px">
             <span class="cn-text">斗南花卉市场</span>
@@ -1542,7 +1575,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🐘</div>
           <div class="sched-body">
             <div class="sched-time">16:00–17:30</div>
-            <div class="sched-title">상비산</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/guilin/elephant-trunk-hill-scenic-area-90682/" target="_blank" rel="noopener">상비산</a></div>
             <div class="sched-desc">구이린의 상징 코끼리 코 모양 바위산</div>
             <div class="sched-fee">🎟 ¥70</div>
             <div class="cn-name" onclick="copyText('象鼻山')">
@@ -1559,7 +1592,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏘️</div>
           <div class="sched-body">
             <div class="sched-time">17:45–19:00</div>
-            <div class="sched-title">동서항 · 저녁</div>
+            <div class="sched-title"><a href="https://kr.trip.com/moments/detail/guilin-28-143285998/" target="_blank" rel="noopener">동서항</a> · 저녁</div>
             <div class="sched-desc">구이린 전통 거리, 먹거리와 야경</div>
             <div class="cn-name" onclick="copyText('东西巷')">
               <span class="cn-text">东西巷</span>
@@ -1575,7 +1608,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🌙</div>
           <div class="sched-body">
             <div class="sched-time">19:30–21:30</div>
-            <div class="sched-title">양강사호 · 일월쌍탑 야경</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/guilin/two-rivers-and-four-lakes-76822/" target="_blank" rel="noopener">양강사호</a> · <a href="https://kr.trip.com/travel-guide/attraction/guilin/the-sun-pagoda-and-the-moon-pagoda-83215/" target="_blank" rel="noopener">일월쌍탑</a> 야경</div>
             <div class="sched-desc">호수 위의 금은 쌍탑이 야경에 빛나는 절경</div>
             <div class="cn-name" onclick="copyText('两江四湖')">
               <span class="cn-text">两江四湖</span>
@@ -1600,7 +1633,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🚣</div>
           <div class="sched-body">
             <div class="sched-time">07:30 죽강부두 이동 · 09:20 출항 목표</div>
-            <div class="sched-title">리강 4성급 크루즈 (구이린 → 양숴)</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/guilin/li-river-75898/" target="_blank" rel="noopener">리강 4성급 크루즈</a> (구이린 → 양숴)</div>
             <div class="sched-desc">20위안 지폐 뒷면 풍경! 약 4시간 앉아서 편하게 산수화 감상</div>
             <div class="sched-fee">🎟 약 ¥360 (변동 가능)</div>
             <div class="cn-name" onclick="copyText('竹江码头')">
@@ -1660,7 +1693,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏮</div>
           <div class="sched-body">
             <div class="sched-time">19:30–21:30</div>
-            <div class="sched-title">서가 야경</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yangshuo/yangshuo-west-street-10558831/" target="_blank" rel="noopener">서가</a> 야경</div>
             <div class="sched-desc">외국인의 거리. 기념품, 카페, 바 거리 산책</div>
             <div class="cn-name" onclick="copyText('西街')">
               <span class="cn-text">西街</span>
@@ -1697,7 +1730,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🎋</div>
           <div class="sched-body">
             <div class="sched-time">08:30–10:30</div>
-            <div class="sched-title">위룽허 대나무뗏목</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yangshuo/yulong-river-80969/" target="_blank" rel="noopener">위룽허 대나무뗏목</a></div>
             <div class="sched-desc">오전 타임 권장. 인기 노선이 전날 저녁 공개되는 경우 있음</div>
             <div class="cn-name" onclick="copyText('遇龙河竹筏')">
               <span class="cn-text">遇龙河竹筏</span>
@@ -1713,7 +1746,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🚲</div>
           <div class="sched-body">
             <div class="sched-time">12:30–17:00</div>
-            <div class="sched-title">십리화랑</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yangshuo/shili-gallery-84570/" target="_blank" rel="noopener">십리화랑</a></div>
             <div class="sched-desc">자전거 또는 전기스쿠터로 카르스트 농촌 풍경 감상</div>
             <div class="cn-name" onclick="copyText('十里画廊')">
               <span class="cn-text">十里画廊</span>
@@ -1756,7 +1789,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">⛰️</div>
           <div class="sched-body">
             <div class="sched-time">07:30 이동 · 08:30–10:00</div>
-            <div class="sched-title">상공산 전망대</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yangshuo/xianggong-mountain-13676008/" target="_blank" rel="noopener">상공산</a> 전망대</div>
             <div class="sched-desc">리강이 내려다보이는 최고의 파노라마 전망</div>
             <div class="cn-name" onclick="copyText('相公山')">
               <span class="cn-text">相公山</span>
@@ -1772,7 +1805,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">🏘️</div>
           <div class="sched-body">
             <div class="sched-time">10:30–12:00</div>
-            <div class="sched-title">싱핑고진</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yangshuo/xingping-ancient-town-82046/" target="_blank" rel="noopener">싱핑고진</a></div>
             <div class="sched-desc">소박한 고대 마을, 리강변 풍경</div>
             <div class="cn-name" onclick="copyText('兴坪古镇')">
               <span class="cn-text">兴坪古镇</span>
@@ -1788,7 +1821,7 @@ body.light .notice-box b{color:#b45309}
           <div class="sched-icon spot">💴</div>
           <div class="sched-body">
             <div class="sched-time">13:00–14:30</div>
-            <div class="sched-title">20위안 지폐 풍경 포인트 · 리강 산책</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/yangshuo/li-river-scenery-on-twenty-yuan-bill-69546182/" target="_blank" rel="noopener">20위안 지폐 풍경 포인트</a> · 리강 산책</div>
             <div class="sched-desc">20위안 뒷면에 인쇄된 바로 그 풍경!</div>
             <br><span class="sched-tag tag-spot">포토 스팟</span>
           </div>
@@ -1989,19 +2022,95 @@ body.light .notice-box b{color:#b45309}
     <h2>꿀팁 · 예약 · 체크리스트</h2>
 
     <div class="tip-section">
-      <h3>🏨 숙소 추천 권역</h3>
-      <div class="tip-card">
-        <div class="tip-text">
-          <b>쿤밍:</b> 취호공원–난핑제–쿤밍라오제 <span class="cn-name" onclick="copyText('翠湖 / 南屏街')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">翠湖/南屏街</span><span class="cn-copy">📋</span></span><br>
-          <b>다리:</b> 고성 동문–얼하이문 바깥 <span class="cn-name" onclick="copyText('大理古城 洱海门')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">大理古城 洱海门</span><span class="cn-copy">📋</span></span><br>
-          <b>리장:</b> 고성 북문/대연화항 외곽 <span class="cn-name" onclick="copyText('丽江古城 北门')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">丽江古城 北门</span><span class="cn-copy">📋</span></span><br>
-          <b>구이린:</b> 상비산–정양보행가 <span class="cn-name" onclick="copyText('象鼻山 / 正阳步行街')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">象鼻山/正阳步行街</span><span class="cn-copy">📋</span></span><br>
-          <b>양숴:</b> 서가 도보 10~15분 <span class="cn-name" onclick="copyText('阳朔西街 1公里')" style="margin:0;padding:2px 6px"><span class="cn-text" style="font-size:11px">阳朔西街 1公里</span><span class="cn-copy">📋</span></span>
+      <h3>🏨 숙소 예약 확정 (윈난 9박)</h3>
+
+      <div class="accom-card">
+        <div class="accom-status">예약 확정</div>
+        <div class="accom-name"><a href="https://kr.trip.com/hotels/kunming-hotel-detail-110034543/xie-shi-jie-gong-yu/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(245,158,11,0.4);text-underline-offset:3px">Yeshijie Hotel</a></div>
+        <div class="accom-dates">11/7 (토) 15:00 — 11/9 (월) 12:00 · 2박</div>
+        <div class="accom-room">패밀리 환영 스위트 — 3개룸, 경관뷰<br><span style="font-size:11px">퀸침대 3개 · 137㎡ · 25층 · 창문 있음 · 성인 6명</span></div>
+        <div class="accom-amenities">공용 주차장 · 짐 보관 · 모닝콜 · 식사 불포함</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">빈장준위안 2기 13동 1607호, 바이윈로 579호, 우화구</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 +86-15087168589 / +86-15887255629</div>
+        <div class="cn-name" onclick="copyText('叶视界公寓(昆明滨江俊园店)')" style="margin:4px 0 8px">
+          <span class="cn-text" style="font-size:12px">叶视界公寓（昆明滨江俊园店）</span>
+          <span class="cn-copy">📋</span>
+        </div>
+        <div class="accom-meta">
+          <span class="accom-price">₩118,420</span>
+          <span class="accom-booking">예약번호: 1400829166285292</span>
         </div>
       </div>
+
+      <div class="accom-card">
+        <div class="accom-status">예약 확정</div>
+        <div class="accom-name"><a href="https://kr.trip.com/hotels/dali-hotel-detail-64816861/dali-sheyu-secret-garden-inn/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(245,158,11,0.4);text-underline-offset:3px">Dali Sheyu Secret Garden Inn</a></div>
+        <div class="accom-dates">11/9 (월) 14:00 — 11/11 (수) 12:00 · 2박</div>
+        <div class="accom-room">환희·2베드룸 가족 스위트룸<br><span style="font-size:11px">퀸침대 2개 · 55㎡ · 1층 · 코트야드 뷰 · 금연 · 성인 4명</span></div>
+        <div class="accom-amenities">건조기 · 가습기 · 직수기 · 각 침실 독립 욕실 · 전용 주차장 2곳 · 픽업/샌딩</div>
+        <div style="font-size:11px;color:#34d399;margin-bottom:4px">🎁 웰컴 과일 · 차 음료&다과 세트(1박당) · 필사&차 음미 체험 · 1:1 집사 · 쑥 족욕</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">난먼신촌 66호, 난먼 주민위원회, 다리시</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 +86-15388779990 / +86-19188148090</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">🍽️ 조식 별도 ¥20/인 (08:00–12:00) · 만 9세 이하 무료</div>
+        <div class="cn-name" onclick="copyText('大理舍予隐秘花园客栈(大理古城南门店)')" style="margin:4px 0 8px">
+          <span class="cn-text" style="font-size:12px">大理舍予隐秘花园客栈（大理古城南门店）</span>
+          <span class="cn-copy">📋</span>
+        </div>
+        <div class="accom-meta">
+          <span class="accom-price">₩204,372</span>
+          <span class="accom-booking">예약번호: 1400829182237597</span>
+        </div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-status">예약 확정</div>
+        <div class="accom-name"><a href="https://kr.trip.com/hotels/lijiang-hotel-detail-125335048/yidou-hotel/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(245,158,11,0.4);text-underline-offset:3px">Yidou Hotel (목부점)</a></div>
+        <div class="accom-dates">11/11 (수) 14:00 — 11/14 (토) 12:00 · 3박</div>
+        <div class="accom-room">이더우허치 가족형 2침실 스위트룸<br><span style="font-size:11px">퀸침대 2개 · 60㎡ · 2~4층 · 창문 있음 · 금연 · 성인 4명</span></div>
+        <div class="accom-amenities">소형 거실 · 스마트홈 · 전용 에어컨 2개 · 야외 수영장 · 헬스장 · 전용 주차장</div>
+        <div style="font-size:11px;color:#34d399;margin-bottom:4px">🎁 조식 포함 (4인/일) · 아메리카노 무제한 · 라파이구 훠궈 15%↓ · 역 픽업(3박) · 탁본 체험</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">창수이로 149호 9동 1호, 상허 가도, 고성구, 리장</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 +86-13378887967</div>
+        <div class="cn-name" onclick="copyText('一兜酒店(丽江古城忠义市场木府店)')" style="margin:4px 0 8px">
+          <span class="cn-text" style="font-size:12px">一兜酒店（丽江古城忠义市场木府店）</span>
+          <span class="cn-copy">📋</span>
+        </div>
+        <div class="accom-meta">
+          <span class="accom-price">₩199,480</span>
+          <span class="accom-booking">예약번호: 1400829118320107</span>
+        </div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-status">예약 확정</div>
+        <div class="accom-name">화룽 디자이너 홈스테이</div>
+        <div class="accom-dates">11/14 (토) 14:00 — 11/16 (월) 12:00 · 2박</div>
+        <div class="accom-room">윈시 180° 파노라마 더블 침대 2개룸<br><span style="font-size:11px">퀸침대 1개 + 더블 1개 · 50~60㎡ · 11~20층 · 레이크뷰 · 흡연가능 · 성인 3명</span></div>
+        <div class="accom-amenities">초대형 프렌치 윈도우 · 프로젝션 · 공용 주차장 2곳 · EV 충전소 · 짐 보관 · 픽업/샌딩</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">치차이윈난 디이청 4호 아파트동 1609호, 차이윈남로, 청궁구</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 +86-15368863966 / +86-13313325686</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px">🍽️ 식사 불포함</div>
+        <div class="cn-name" onclick="copyText('花容设计师酒店(昆明南站七彩云南第壹城店)')" style="margin:4px 0 8px">
+          <span class="cn-text" style="font-size:12px">花容设计师酒店（昆明南站七彩云南第壹城店）</span>
+          <span class="cn-copy">📋</span>
+        </div>
+        <div class="accom-meta">
+          <span class="accom-price">₩99,784</span>
+          <span class="accom-booking">예약번호: 1400829148318171</span>
+        </div>
+      </div>
+
+      <div class="tip-card" style="text-align:center">
+        <div class="tip-text" style="font-size:13px">
+          <b style="color:#34d399">윈난 9박 숙소 합계: ₩622,056</b><br>
+          <span style="font-size:11px;color:#64748b">예약자: SUJI JEON · 트립닷컴 예약 · 구이린/양숴 5박 미정</span>
+        </div>
+      </div>
+
       <div class="tip-card">
         <div class="tip-text" style="font-size:12px;color:#64748b">
-          <b>공통 필터:</b> 무료취소 · 엘리베이터/저층 · DiDi 진입 가능 · 세탁 가능 · "安静(조용함) / 打车方便(택시 편리)" 후기 확인
+          <b>미예약 구간:</b> 구이린 2박 (11/16~18) · 양숴 2박 (11/18~20) · 구이린 1박 (11/20~21)<br>
+          <b>권역 참고:</b> 구이린 — 상비산·정양보행가 / 양숴 — 서가 도보 10~15분
         </div>
       </div>
     </div>
@@ -2083,6 +2192,8 @@ body.light .notice-box b{color:#b45309}
       <div class="tip-card">
         <div class="tip-title">장소 이름 (탭해서 복사)</div>
         <div class="tip-text" style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px">
+          <span class="cn-name" onclick="copyText('叶视界公寓(昆明滨江俊园店)')" style="margin:0"><span class="cn-text">叶视界公寓（昆明滨江俊园店）</span><span class="cn-copy">📋</span></span><span>Yeshijie Hotel</span>
+          <span class="cn-name" onclick="copyText('大理舍予隐秘花园客栈(大理古城南门店)')" style="margin:0"><span class="cn-text">大理舍予隐秘花园客栈（大理古城南门店）</span><span class="cn-copy">📋</span></span><span>Sheyu Secret Garden Inn</span>
           <span class="cn-name" onclick="copyText('花容设计师酒店(昆明南站七彩云南第壹城店)')" style="margin:0"><span class="cn-text">花容设计师酒店</span><span class="cn-copy">📋</span></span><span>화룽 디자이너 홈스테이</span>
           <span class="cn-name" onclick="copyText('九乡风景区')" style="margin:0"><span class="cn-text">九乡风景区</span><span class="cn-copy">📋</span></span><span>구향동굴</span>
           <span class="cn-name" onclick="copyText('斗南花卉市场')" style="margin:0"><span class="cn-text">斗南花卉市场</span><span class="cn-copy">📋</span></span><span>두난 꽃시장</span>
@@ -2157,7 +2268,7 @@ body.light .notice-box b{color:#b45309}
     </div>
 
     <div style="text-align:center;margin-top:30px;padding:20px;color:#64748b;font-size:13px">
-      <small style="opacity:0.5">Last updated: 2026. 09. 11</small><br>
+      <small style="opacity:0.5">Last updated: 2026. 09. 18</small><br>
       <small style="opacity:0.3;font-size:11px">2026 윈난·구이린·양숴 최종 여행 플랜</small>
     </div>
   </div>
@@ -2173,7 +2284,7 @@ body.light .notice-box b{color:#b45309}
 
     <table class="budget-table" id="budgetTableAB">
       <tr><td>✈️ 항공권</td><td>확정 (왕복)</td><td>₩585,200</td></tr>
-      <tr><td>🏨 숙소</td><td>14박 ₩40,000/인/박</td><td>₩560,000</td></tr>
+      <tr><td>🏨 숙소</td><td>윈난 9박 확정 + 구이린 5박 추정</td><td>₩416,000</td></tr>
       <tr><td>🚄 고속열차</td><td>4구간 ¥863</td><td>₩173,000</td></tr>
       <tr><td>🎟️ 입장료</td><td>석림·설산·크루즈 등</td><td>₩257,000</td></tr>
       <tr><td>🍽️ 식비</td><td>¥100/일 × 15일</td><td>₩300,000</td></tr>
@@ -2191,7 +2302,7 @@ body.light .notice-box b{color:#b45309}
 
     <table class="budget-table" id="budgetTableC">
       <tr><td>✈️ 항공권</td><td>확정 (왕복)</td><td>₩637,900</td></tr>
-      <tr><td>🏨 숙소</td><td>8박 ₩40,000/인/박</td><td>₩320,000</td></tr>
+      <tr><td>🏨 숙소</td><td>윈난 8박 확정 (화룽 1박)</td><td>₩191,000</td></tr>
       <tr><td>🚄 고속열차</td><td>3구간 ¥438</td><td>₩88,000</td></tr>
       <tr><td>🎟️ 입장료</td><td>석림·설산 등 ¥595</td><td>₩119,000</td></tr>
       <tr><td>🍽️ 식비</td><td>¥100/일 × 9일</td><td>₩180,000</td></tr>
@@ -2216,6 +2327,13 @@ body.light .notice-box b{color:#b45309}
       · 숙소 1박 ¥150~500 (민숙~호텔)<br>
       · 호도협 전세차(하루) ¥800~1,200 (인원수 나누기)<br>
       · 산소캔 ¥15~30 · 한국 대비 물가 약 60~70%
+    </div>
+
+    <div class="budget-note" style="margin-top:8px">
+      💡 <b>숙소 확정 내역 (총 ₩622,056)</b><br>
+      · Yeshijie 2박 ₩118,420 · Sheyu 2박 ₩204,372 · Yidou 3박 ₩199,480 · 화룽 2박 ₩99,784<br>
+      · <b>A/B 1인:</b> 윈난 9박 ₩216,000 (화룽 2박째 2인 분할) + 구이린 5박 ₩200,000 추정<br>
+      · <b>C 1인:</b> 윈난 8박 ₩191,000 (화룽 1박만, 3인 분할)
     </div>
 
     <div style="text-align:center;margin-top:32px;padding:20px;color:#64748b;font-size:12px">
@@ -2300,6 +2418,12 @@ function initMaps() {
     iconSize: [12, 12],
     iconAnchor: [6, 6]
   });
+  const hotelIcon = L.divIcon({
+    className: '',
+    html: '<div style="width:14px;height:14px;background:#34d399;border:2px solid #fff;border-radius:50%;box-shadow:0 0 6px rgba(52,211,153,0.6)"></div>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
+  });
 
   function makeMap(id, center, zoom, markers) {
     const el = document.getElementById(id);
@@ -2313,7 +2437,7 @@ function initMaps() {
     L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
     markers.forEach(m => {
       const mapLink = 'https://www.google.com/maps/search/' + encodeURIComponent(m.cn || m.name) + '/@' + m.ll[0] + ',' + m.ll[1] + ',14z';
-      L.marker(m.ll, { icon: markerIcon }).addTo(map).bindPopup(
+      L.marker(m.ll, { icon: m.hotel ? hotelIcon : markerIcon }).addTo(map).bindPopup(
         '<div style="font-size:13px;font-weight:600;color:#1a1a1a">' + m.name + '</div>' +
         (m.cn ? '<div style="font-size:12px;color:#666">' + m.cn + '</div>' : '') +
         '<a href="' + mapLink + '" target="_blank" rel="noopener" style="font-size:11px;color:#2563eb;text-decoration:none;display:inline-block;margin-top:4px">Google Maps에서 보기 →</a>'
@@ -2339,15 +2463,17 @@ function initMaps() {
     { ll: [25.10, 102.93], name: '창수이 공항', cn: '昆明长水国际机场' },
     { ll: [25.05, 102.71], name: '취호공원', cn: '翠湖公园' },
     { ll: [24.77, 103.33], name: '석림', cn: '石林风景名胜区' },
-    { ll: [24.60, 103.43], name: '구향동굴', cn: '九乡风景区' }
+    { ll: [24.60, 103.43], name: '구향동굴', cn: '九乡风景区' },
+    { ll: [25.035, 102.715], name: '🏨 Yeshijie Hotel', cn: '叶视界公寓', hotel: true }
   ]);
 
   // Dali
   makeMap('map-dali', [25.72, 100.17], 11, [
-    { ll: [25.5925, 100.1647], name: '다리고성', cn: '大理古城' },
+    { ll: [25.6897, 100.1633], name: '다리고성', cn: '大理古城' },
     { ll: [25.7087, 100.1472], name: '숭성사삼탑', cn: '崇圣寺三塔' },
     { ll: [25.75, 100.22], name: '얼하이호', cn: '洱海' },
-    { ll: [25.865, 100.1515], name: '시저우고진', cn: '喜洲古镇' }
+    { ll: [25.865, 100.1515], name: '시저우고진', cn: '喜洲古镇' },
+    { ll: [25.6825, 100.1625], name: '🏨 Sheyu Secret Garden Inn', cn: '大理舍予隐秘花园客栈', hotel: true }
   ]);
 
   // Lijiang
@@ -2360,7 +2486,8 @@ function initMaps() {
     { ll: [27.08, 100.20], name: '운삼평', cn: '云杉坪' },
     { ll: [27.05, 100.21], name: '감해자', cn: '甘海子' },
     { ll: [26.89, 100.23], name: '흑룡담', cn: '黑龙潭公园' },
-    { ll: [27.13, 100.26], name: '모우평', cn: '牦牛坪' }
+    { ll: [27.13, 100.26], name: '모우평', cn: '牦牛坪' },
+    { ll: [26.865, 100.225], name: '🏨 Yidou Hotel', cn: '一兜酒店', hotel: true }
   ]);
 
   // Guilin
@@ -2371,7 +2498,8 @@ function initMaps() {
     { ll: [25.1019, 102.9292], name: '쿤밍 공항', cn: '昆明长水国际机场' },
     { ll: [24.9186, 102.7583], name: '쿤밍남역', cn: '昆明南站' },
     { ll: [25.02, 102.76], name: '두난 꽃시장', cn: '斗南花卉市场' },
-    { ll: [24.96, 102.68], name: '뎬츠', cn: '滇池' }
+    { ll: [24.96, 102.68], name: '뎬츠', cn: '滇池' },
+    { ll: [24.916, 102.755], name: '🏨 화룽 디자이너 홈스테이', cn: '花容设计师酒店', hotel: true }
   ]);
 
   makeMap('map-guilin', [25.3, 110.3], 12, [
