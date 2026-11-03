@@ -106,8 +106,56 @@ html,body{
 .page-yangshuo{background:linear-gradient(180deg,#2d1b4a 0%,#1a0f00 30%)}
 .page-return{background:linear-gradient(180deg,#3a2d1b 0%,#1a0f00 30%)}
 .page-tips{background:linear-gradient(180deg,#3b1f1f 0%,#1a0f00 30%)}
+.page-overview{background:linear-gradient(180deg,#2d2417 0%,#1a0f00 30%)}
 .page-budget{background:linear-gradient(180deg,#1f2b3b 0%,#1a0f00 30%)}
+body.light .page-overview{background:linear-gradient(180deg,#fef3c740 0%,#f5f0eb 30%)}
 body.light .page-budget{background:linear-gradient(180deg,#dbeafe40 0%,#f5f0eb 30%)}
+
+/* Overview Calendar */
+.overview-page{
+  padding:32px 8px 80px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  height:100%;
+}
+.overview-page h2{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}
+.overview-sub{text-align:center;font-size:13px;opacity:0.6;margin-bottom:16px}
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:3px;
+  width:100%;max-width:420px;
+}
+.cal-header{
+  text-align:center;font-size:11px;font-weight:700;
+  opacity:0.5;padding:6px 0;
+}
+.cal-cell{
+  border-radius:8px;padding:8px 4px;
+  text-align:center;min-height:56px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.cal-cell.empty{background:transparent;border-color:transparent}
+.cal-date{font-size:10px;opacity:0.5;margin-bottom:2px}
+.cal-day{font-size:9px;opacity:0.35;margin-bottom:1px}
+.cal-label{font-size:11px;font-weight:600;line-height:1.3}
+.cal-grid .cal-cell.city-kunming{border-top:3px solid #d97706;background:rgba(217,119,6,0.12)}
+.cal-grid .cal-cell.city-dali{border-top:3px solid #84cc16;background:rgba(132,204,22,0.10)}
+.cal-grid .cal-cell.city-lijiang{border-top:3px solid #60a5fa;background:rgba(96,165,250,0.10)}
+.cal-grid .cal-cell.city-guilin{border-top:3px solid #34d399;background:rgba(52,211,153,0.10)}
+.cal-grid .cal-cell.city-yangshuo{border-top:3px solid #a78bfa;background:rgba(167,139,250,0.10)}
+.cal-grid .cal-cell.city-return{border-top:3px solid #f87171;background:rgba(248,113,113,0.10)}
+body.light .cal-cell{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.06)}
+body.light .cal-cell.empty{background:transparent;border-color:transparent}
+body.light .cal-grid .cal-cell.city-kunming{border-top:3px solid #d97706;background:rgba(217,119,6,0.08)}
+body.light .cal-grid .cal-cell.city-dali{border-top:3px solid #84cc16;background:rgba(132,204,22,0.08)}
+body.light .cal-grid .cal-cell.city-lijiang{border-top:3px solid #60a5fa;background:rgba(96,165,250,0.08)}
+body.light .cal-grid .cal-cell.city-guilin{border-top:3px solid #34d399;background:rgba(52,211,153,0.08)}
+body.light .cal-grid .cal-cell.city-yangshuo{border-top:3px solid #a78bfa;background:rgba(167,139,250,0.08)}
+body.light .cal-grid .cal-cell.city-return{border-top:3px solid #f87171;background:rgba(248,113,113,0.08)}
 
 /* Budget */
 .budget-page{padding:32px 16px 80px}
@@ -584,7 +632,7 @@ body.light .notice-box b{color:#b45309}
     </div>
     <!-- A,B 귀국 -->
     <div class="flight-summary">
-      <div class="fs-label">✈ A,B 귀국 · 11/21 (토) · MU5390 + MU5011 · NEMYBR</div>
+      <div class="fs-label">✈ A,B,C 귀국 · 11/21 (토) · MU5390 + MU5011 · NEMYBR</div>
       <div class="fs-route">
         <div class="fs-point">
           <div class="code">07:30</div>
@@ -602,31 +650,112 @@ body.light .notice-box b{color:#b45309}
       </div>
     </div>
 
-    <!-- C 귀국 -->
-    <div class="flight-summary">
-      <div class="fs-label">✈ C 귀국 · 11/15 (일) · MU2003 · NEGZT3</div>
-      <div class="fs-route">
-        <div class="fs-point">
-          <div class="code">17:40</div>
-          <div class="name">KMG 쿤밍</div>
-        </div>
-        <div class="fs-mid">
-          <div class="dur">4시간 05분</div>
-          <div class="line"></div>
-          <div class="info">중국동방항공 · 직항 · T1</div>
-        </div>
-        <div class="fs-point">
-          <div class="code">22:45</div>
-          <div class="name">ICN 인천 T1</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cover-map" id="map-route"></div>
   </div>
 </div>
 
-<!-- ══════ PAGE 1: 쿤밍 DAY 1-2 ══════ -->
+<!-- ══════ PAGE 1: 전체 일정 ══════ -->
+<div class="page page-overview">
+  <div class="overview-page">
+    <div class="cover-map" id="map-route" style="width:100%;max-width:420px;height:160px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);overflow:hidden;margin-bottom:16px;flex-shrink:0"></div>
+    <h2>📅 전체 일정</h2>
+    <p class="overview-sub">A, B, C · 14박 15일</p>
+    <div class="cal-grid">
+      <div class="cal-header">토</div>
+      <div class="cal-header">일</div>
+      <div class="cal-header">월</div>
+      <div class="cal-header">화</div>
+      <div class="cal-header">수</div>
+      <div class="cal-header">목</div>
+      <div class="cal-header">금</div>
+
+      <div class="cal-cell city-kunming">
+        <div class="cal-date">11/07</div>
+        <div class="cal-day">DAY 1</div>
+        <div class="cal-label">출국→쿤밍</div>
+      </div>
+      <div class="cal-cell city-kunming">
+        <div class="cal-date">11/08</div>
+        <div class="cal-day">DAY 2</div>
+        <div class="cal-label">쿤밍</div>
+      </div>
+      <div class="cal-cell city-dali">
+        <div class="cal-date">11/09</div>
+        <div class="cal-day">DAY 3</div>
+        <div class="cal-label">쿤밍→다리</div>
+      </div>
+      <div class="cal-cell city-dali">
+        <div class="cal-date">11/10</div>
+        <div class="cal-day">DAY 4</div>
+        <div class="cal-label">다리</div>
+      </div>
+      <div class="cal-cell city-lijiang">
+        <div class="cal-date">11/11</div>
+        <div class="cal-day">DAY 5</div>
+        <div class="cal-label">다리→리장</div>
+      </div>
+      <div class="cal-cell city-lijiang">
+        <div class="cal-date">11/12</div>
+        <div class="cal-day">DAY 6</div>
+        <div class="cal-label">리장</div>
+      </div>
+      <div class="cal-cell city-lijiang">
+        <div class="cal-date">11/13</div>
+        <div class="cal-day">DAY 7</div>
+        <div class="cal-label">리장</div>
+      </div>
+
+      <div class="cal-cell city-kunming">
+        <div class="cal-date">11/14</div>
+        <div class="cal-day">DAY 8</div>
+        <div class="cal-label">리장→쿤밍</div>
+      </div>
+      <div class="cal-cell city-guilin">
+        <div class="cal-date">11/15</div>
+        <div class="cal-day">DAY 9</div>
+        <div class="cal-label">쿤밍→구이린</div>
+      </div>
+      <div class="cal-cell city-guilin">
+        <div class="cal-date">11/16</div>
+        <div class="cal-day">DAY 10</div>
+        <div class="cal-label">구이린</div>
+      </div>
+      <div class="cal-cell city-yangshuo">
+        <div class="cal-date">11/17</div>
+        <div class="cal-day">DAY 11</div>
+        <div class="cal-label">구이린→양숴</div>
+      </div>
+      <div class="cal-cell city-yangshuo">
+        <div class="cal-date">11/18</div>
+        <div class="cal-day">DAY 12</div>
+        <div class="cal-label">양숴</div>
+      </div>
+      <div class="cal-cell city-yangshuo">
+        <div class="cal-date">11/19</div>
+        <div class="cal-day">DAY 13</div>
+        <div class="cal-label">양숴</div>
+      </div>
+      <div class="cal-cell city-guilin">
+        <div class="cal-date">11/20</div>
+        <div class="cal-day">DAY 14</div>
+        <div class="cal-label">양숴→구이린</div>
+      </div>
+
+      <div class="cal-cell city-return">
+        <div class="cal-date">11/21</div>
+        <div class="cal-day">DAY 15</div>
+        <div class="cal-label">구이린→귀국</div>
+      </div>
+      <div class="cal-cell empty"></div>
+      <div class="cal-cell empty"></div>
+      <div class="cal-cell empty"></div>
+      <div class="cal-cell empty"></div>
+      <div class="cal-cell empty"></div>
+      <div class="cal-cell empty"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 2: 쿤밍 DAY 1-2 ══════ -->
 <div class="page page-kunming">
   <div class="day-page">
     <div class="day-hero">
@@ -879,18 +1008,18 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon move">🚄</div>
           <div class="sched-body">
-            <div class="sched-time">08:00대</div>
-            <div class="sched-title">쿤밍남 → 다리 고속열차</div>
-            <div class="sched-desc">약 2시간</div>
-            <div class="cn-name" onclick="copyText('昆明南站')">
-              <span class="cn-text">昆明南站</span>
+            <div class="sched-time">09:35–11:44 (D8692)</div>
+            <div class="sched-title">쿤밍 → 다리 고속열차</div>
+            <div class="sched-desc">2시간 9분 · 3명 ₩94,399</div>
+            <div class="cn-name" onclick="copyText('昆明站')">
+              <span class="cn-text">昆明站</span>
               <span class="cn-copy">📋</span>
             </div>
             <div class="cn-name" onclick="copyText('大理站')">
               <span class="cn-text">大理站</span>
               <span class="cn-copy">📋</span>
             </div>
-            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예약 확정</span>
           </div>
         </div>
       </div>
@@ -1023,14 +1152,14 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon move">🚄</div>
           <div class="sched-body">
-            <div class="sched-time">08:00대</div>
+            <div class="sched-time">09:58–11:57 (C987)</div>
             <div class="sched-title">다리 → 리장 고속열차</div>
-            <div class="sched-desc">약 1.5~2시간</div>
+            <div class="sched-desc">1시간 59분 · 3명 ₩48,242</div>
             <div class="cn-name" onclick="copyText('丽江站')">
               <span class="cn-text">丽江站</span>
               <span class="cn-copy">📋</span>
             </div>
-            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예약 확정</span>
           </div>
         </div>
       </div>
@@ -1338,9 +1467,9 @@ body.light .notice-box b{color:#b45309}
   <div class="day-page">
     <div class="day-hero">
       <div class="day-num">DAY 8-9</div>
-      <div class="day-title">이동 · 배웅</div>
+      <div class="day-title">이동 · 구이린</div>
       <div class="day-date">11월 14일 (토) — 15일 (일)</div>
-      <div class="day-hotel-badge">🏨 화룽 디자이너 홈스테이 · 예약 완료</div>
+      <div class="day-hotel-badge">🏨 솽시 가든 1박 → 유니버설 구이린 호텔</div>
     </div>
     <div class="day-map" id="map-split"></div>
 
@@ -1389,14 +1518,14 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon move">🚄</div>
           <div class="sched-body">
-            <div class="sched-time">14:00~15:00대</div>
-            <div class="sched-title">리장 → 쿤밍 고속열차</div>
-            <div class="sched-desc">약 4시간</div>
+            <div class="sched-time">16:52–21:24 (C460)</div>
+            <div class="sched-title">리장 → 쿤밍남 고속열차</div>
+            <div class="sched-desc">4시간 32분 · 3명 ₩130,719</div>
             <div class="cn-name" onclick="copyText('昆明南站')">
               <span class="cn-text">昆明南站</span>
               <span class="cn-copy">📋</span>
             </div>
-            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예약 확정</span>
           </div>
         </div>
       </div>
@@ -1405,11 +1534,11 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon hotel">🏨</div>
           <div class="sched-body">
-            <div class="sched-time">18:30~20:00</div>
-            <div class="sched-title">쿤밍 도착 · 화룽 디자이너 홈스테이 체크인 · 저녁</div>
-            <div class="sched-desc">체크인 14:00~ · 체크아웃 11/16 12:00 · 레이크뷰 · 식사 불포함<br><span style="font-size:11px;color:#64748b">📞 +86-15368863966 / +86-13313325686</span></div>
-            <div class="cn-name" onclick="copyText('花容设计师酒店(昆明南站七彩云南第壹城店)')">
-              <span class="cn-text">花容设计师酒店（昆明南站七彩云南第壹城店）</span>
+            <div class="sched-time">21:30~22:00</div>
+            <div class="sched-title">쿤밍남 도착 · <a href="https://www.trip.com/hotels/kunming-hotel-detail-133282864/shuangqi-garden-hotel/" target="_blank" rel="noopener">솽시 가든 호텔</a> 체크인 · 늦은 저녁</div>
+            <div class="sched-desc">체크인 14:00~ · 체크아웃 11/15 12:00 · 춘청 중정형 패밀리 스위트룸 · 3룸 3욕실 · 식사 불포함<br><span style="font-size:11px;color:#64748b">짐 보관 · 모닝콜 · 공용 Wi-Fi</span></div>
+            <div class="cn-name" onclick="copyText('双喜花园酒店(昆明南部高铁站店)')">
+              <span class="cn-text">双喜花园酒店（昆明南部高铁站店）</span>
               <span class="cn-copy">📋</span>
             </div>
             <br><span class="sched-tag tag-hotel">숙소</span>
@@ -1419,131 +1548,16 @@ body.light .notice-box b{color:#b45309}
     </div>
 
     <div class="section-divider"></div>
-    <div class="section-day-label">DAY 9 · 11/15 일 · 두난 꽃시장 + C 공항 배웅 + A/B 뎬츠</div>
+    <div class="section-day-label">DAY 9 · 11/15 일 · 쿤밍 → 구이린</div>
 
-    <div class="tl-wrap">
-      <div class="tl-item">
-        <div class="tl-time">08:00</div>
-        <div class="tl-content">
-          <div class="tl-title">기상 · 아침</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">08:45</div>
-        <div class="tl-content">
-          <div class="tl-title"><a href="https://kr.trip.com/travel-guide/attraction/kunming/dounan-flower-fair-62869851/" target="_blank" rel="noopener">두난 꽃시장</a></div>
-          <div class="tl-desc">C와 함께 꽃시장 분위기 가볍게 구경</div>
-          <div class="cn-name" onclick="copyText('斗南花卉市场')" style="margin-top:4px">
-            <span class="cn-text">斗南花卉市场</span>
-            <span class="cn-copy">📋</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">11:00</div>
-        <div class="tl-content">
-          <div class="tl-title">두난 주변 카페 · 점심</div>
-          <div class="tl-desc">가벼운 자유시간</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">12:45</div>
-        <div class="tl-content">
-          <div class="tl-title">화룽 숙소 복귀 · C 짐 정리</div>
-          <div class="tl-desc">호텔 보관 짐 수령 · 휴식</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">~15:00</div>
-        <div class="tl-content">
-          <div class="tl-title">DiDi로 공항 출발</div>
-          <div class="tl-desc">화룽→창수이 약 40분</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">15:40</div>
-        <div class="tl-content">
-          <div class="tl-title">공항 도착 · C 체크인</div>
-          <div class="tl-desc">MU2003 17:40 · 위탁수하물 1개 · T1</div>
-          <div class="cn-name" onclick="copyText('昆明长水国际机场')" style="margin-top:4px">
-            <span class="cn-text">昆明长水国际机场</span>
-            <span class="cn-copy">📋</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-item highlight">
-        <div class="tl-time">16:00</div>
-        <div class="tl-content">
-          <div class="tl-title">C 배웅 👋</div>
-          <div class="tl-desc">중국동방항공 MU2003 직항<br>KMG 17:40 → ICN 22:45 (4h05m)</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">16:10</div>
-        <div class="tl-content">
-          <div class="tl-title">A/B 뎬츠 방향 이동</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">17:00</div>
-        <div class="tl-content">
-          <div class="tl-title">뎬츠 · 하이겅공원</div>
-          <div class="tl-desc">갈매기·호수·해질녘 산책. 11월은 해가 빨리 지므로 공항 배웅 후 바로 이동</div>
-          <div class="cn-name" onclick="copyText('滇池')" style="margin-top:4px">
-            <span class="cn-text">滇池</span>
-            <span class="cn-copy">📋</span>
-          </div>
-          <div class="cn-name" onclick="copyText('海埂公园')" style="margin-top:4px">
-            <span class="cn-text">海埂公园</span>
-            <span class="cn-copy">📋</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-time">19:00~</div>
-        <div class="tl-content">
-          <div class="tl-title">A/B 저녁 → 화룽 숙소 복귀</div>
-          <div class="tl-desc">다음날 아침 열차 준비</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="notice-box">
-      <b>C 귀국:</b> 동방항공 MU2003 직항 KMG 17:40 → ICN 22:45 (4h05m)<br>
-      <b>A,B:</b> 배웅 후 뎬츠 관람 → 화룽 2박째 → 11/16 아침 G2938(08:24)로 구이린 이동
-    </div>
-  </div>
-</div>
-
-<!-- ══════ PAGE 5: 구이린 DAY 10-11 ══════ -->
-<div class="page page-guilin">
-  <div class="day-page">
-    <div class="day-hero">
-      <div class="day-num">DAY 10-11</div>
-      <div class="day-title">구이린 桂林</div>
-      <div class="day-date">11월 16일 (월) — 17일 (화)</div>
-      <div class="day-hotel-badge">🏞️ 상비산–정양보행가–동서항 권역</div>
-    </div>
-    <div class="day-map" id="map-guilin"></div>
-
-    <div class="section-day-label">DAY 10 · 11/16 월 · 쿤밍→구이린</div>
     <div class="timeline">
 
       <div class="sched">
         <div class="sched-top">
           <div class="sched-icon hotel">⏰</div>
           <div class="sched-body">
-            <div class="sched-time">06:30</div>
-            <div class="sched-title">기상 · 간단한 아침 · 화룽 체크아웃</div>
+            <div class="sched-time">06:45</div>
+            <div class="sched-title">기상 · 간단한 아침 · 체크아웃</div>
             <span class="sched-tag tag-hotel">체크아웃</span>
           </div>
         </div>
@@ -1551,21 +1565,52 @@ body.light .notice-box b{color:#b45309}
 
       <div class="transit">
         <div class="transit-icon">🚗</div>
-        <div class="transit-info">07:00~07:15 화룽 출발 → 쿤밍남역</div>
+        <div class="transit-info">07:20~07:50 솽시 가든 출발 → 쿤밍남역 이동 · 탑승 준비</div>
       </div>
 
       <div class="sched">
         <div class="sched-top">
           <div class="sched-icon move">🚄</div>
           <div class="sched-body">
-            <div class="sched-time">08:24 목표 (G2938)</div>
+            <div class="sched-time">08:24–12:52 (G2938)</div>
             <div class="sched-title">쿤밍남 → 구이린서 고속열차</div>
-            <div class="sched-desc">약 4.5시간, 12:52 도착 목표. 현재 운행 패턴 기준</div>
+            <div class="sched-desc">4시간 28분 · 3명 ₩257,040</div>
+            <div class="cn-name" onclick="copyText('昆明南站')">
+              <span class="cn-text">昆明南站</span>
+              <span class="cn-copy">📋</span>
+            </div>
             <div class="cn-name" onclick="copyText('桂林西站')">
               <span class="cn-text">桂林西站</span>
               <span class="cn-copy">📋</span>
             </div>
-            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예매 필요</span>
+            <br><span class="sched-tag tag-train">고속열차</span> <span class="sched-tag tag-must">예약 확정</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">12:52–14:15</div>
+            <div class="sched-title">구이린 시내 이동 · 점심</div>
+            <span class="sched-tag tag-food">식사</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">14:30~</div>
+            <div class="sched-title"><a href="https://kr.trip.com/hotels/guilin-hotel-detail-133282864/universal-guilin-hotel/" target="_blank" rel="noopener">유니버설 구이린 호텔</a> 체크인 · 휴식</div>
+            <div class="sched-desc">프리미어 스위트 · 퀸 1 + 싱글 2 · 65~75㎡ · 시티 뷰 · 조식 포함<br><span style="font-size:11px;color:#64748b">체크아웃 11/17 12:00 · +86-773-3388666</span></div>
+            <div class="cn-name" onclick="copyText('环球国际酒店(桂林两江四湖象鼻山店)')">
+              <span class="cn-text">环球国际酒店（桂林两江四湖象鼻山店）</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-hotel">숙소</span> <span class="sched-tag tag-must">예약 확정</span>
           </div>
         </div>
       </div>
@@ -1574,7 +1619,7 @@ body.light .notice-box b{color:#b45309}
         <div class="sched-top">
           <div class="sched-icon spot">🐘</div>
           <div class="sched-body">
-            <div class="sched-time">16:00–17:30</div>
+            <div class="sched-time">15:00–16:30</div>
             <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/guilin/elephant-trunk-hill-scenic-area-90682/" target="_blank" rel="noopener">상비산</a></div>
             <div class="sched-desc">구이린의 상징 코끼리 코 모양 바위산</div>
             <div class="sched-fee">🎟 ¥70</div>
@@ -1589,13 +1634,97 @@ body.light .notice-box b{color:#b45309}
 
       <div class="sched">
         <div class="sched-top">
-          <div class="sched-icon spot">🏘️</div>
+          <div class="sched-icon hotel">☕</div>
           <div class="sched-body">
-            <div class="sched-time">17:45–19:00</div>
-            <div class="sched-title"><a href="https://kr.trip.com/moments/detail/guilin-28-143285998/" target="_blank" rel="noopener">동서항</a> · 저녁</div>
-            <div class="sched-desc">구이린 전통 거리, 먹거리와 야경</div>
-            <div class="cn-name" onclick="copyText('东西巷')">
-              <span class="cn-text">东西巷</span>
+            <div class="sched-time">16:30–18:00</div>
+            <div class="sched-title">주변 산책 · 카페</div>
+            <span class="sched-tag tag-hotel">휴식</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">18:00–19:30</div>
+            <div class="sched-title">저녁식사</div>
+            <span class="sched-tag tag-food">식사</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌙</div>
+          <div class="sched-body">
+            <div class="sched-time">19:30–20:30</div>
+            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/guilin/the-sun-pagoda-and-the-moon-pagoda-83215/" target="_blank" rel="noopener">일월쌍탑</a> · 산후호 야경</div>
+            <div class="sched-desc">호수 위의 금은 쌍탑이 야경에 빛나는 절경</div>
+            <div class="cn-name" onclick="copyText('日月双塔')">
+              <span class="cn-text">日月双塔</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('杉湖')">
+              <span class="cn-text">杉湖</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">야경</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">21:00</div>
+            <div class="sched-title">호텔 휴식</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <b>✅ 열차 4구간 예약 확정</b> D8692 · C987 · C460 · G2938 — 3명 총 ₩530,400
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 5: 구이린 DAY 10-11 ══════ -->
+<div class="page page-guilin">
+  <div class="day-page">
+    <div class="day-hero">
+      <div class="day-num">DAY 10-11</div>
+      <div class="day-title">구이린 桂林</div>
+      <div class="day-date">11월 16일 (월) — 17일 (화)</div>
+      <div class="day-hotel-badge">🏨 유니버설 구이린 호텔 2박 예약 완료 · 조식 포함</div>
+    </div>
+    <div class="day-map" id="map-guilin"></div>
+
+    <div class="section-day-label">DAY 10 · 11/16 월 · 구이린 시내 여유 관광</div>
+    <div class="timeline">
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">08:30–09:30</div>
+            <div class="sched-title">호텔 조식 (포함)</div>
+            <span class="sched-tag tag-food">조식 포함</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🌿</div>
+          <div class="sched-body">
+            <div class="sched-time">09:30–11:30</div>
+            <div class="sched-title">칠성공원 또는 시내 산책</div>
+            <div class="sched-desc">구이린 시내 최대 공원, 자연 카르스트 지형 산책</div>
+            <div class="cn-name" onclick="copyText('七星公园')">
+              <span class="cn-text">七星公园</span>
               <span class="cn-copy">📋</span>
             </div>
             <br><span class="sched-tag tag-spot">관광</span>
@@ -1605,23 +1734,80 @@ body.light .notice-box b{color:#b45309}
 
       <div class="sched">
         <div class="sched-top">
-          <div class="sched-icon spot">🌙</div>
+          <div class="sched-icon food">🍜</div>
           <div class="sched-body">
-            <div class="sched-time">19:30–21:30</div>
-            <div class="sched-title"><a href="https://kr.trip.com/travel-guide/attraction/guilin/two-rivers-and-four-lakes-76822/" target="_blank" rel="noopener">양강사호</a> · <a href="https://kr.trip.com/travel-guide/attraction/guilin/the-sun-pagoda-and-the-moon-pagoda-83215/" target="_blank" rel="noopener">일월쌍탑</a> 야경</div>
-            <div class="sched-desc">호수 위의 금은 쌍탑이 야경에 빛나는 절경</div>
-            <div class="cn-name" onclick="copyText('两江四湖')">
-              <span class="cn-text">两江四湖</span>
+            <div class="sched-time">11:30–13:00</div>
+            <div class="sched-title">구이린 미펀 점심</div>
+            <div class="sched-desc">구이린 대표 쌀국수, 현지인 맛집 탐방</div>
+            <div class="cn-name" onclick="copyText('桂林米粉')">
+              <span class="cn-text">桂林米粉</span>
               <span class="cn-copy">📋</span>
             </div>
-            <div class="cn-name" onclick="copyText('日月双塔')">
-              <span class="cn-text">日月双塔</span>
-              <span class="cn-copy">📋</span>
-            </div>
-            <br><span class="sched-tag tag-spot">야경</span>
+            <br><span class="sched-tag tag-food">필수 맛집</span>
           </div>
         </div>
       </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon spot">🏔️</div>
+          <div class="sched-body">
+            <div class="sched-time">13:00–15:00</div>
+            <div class="sched-title">루디옌 동굴 또는 카페 · 휴식</div>
+            <div class="sched-desc">석림·구향동굴을 이미 방문했으므로 선택사항. 피로하면 카페 휴식 추천</div>
+            <div class="cn-name" onclick="copyText('芦笛岩')">
+              <span class="cn-text">芦笛岩</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-spot">선택</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon shop">🛍️</div>
+          <div class="sched-body">
+            <div class="sched-time">15:00–18:30</div>
+            <div class="sched-title"><a href="https://kr.trip.com/moments/detail/guilin-28-143285998/" target="_blank" rel="noopener">동서거리</a> + 정양보행가 쇼핑</div>
+            <div class="sched-desc">구이린 중심 쇼핑 거리, 기념품·간식·현지 분위기</div>
+            <div class="cn-name" onclick="copyText('东西巷')">
+              <span class="cn-text">东西巷</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <div class="cn-name" onclick="copyText('正阳步行街')">
+              <span class="cn-text">正阳步行街</span>
+              <span class="cn-copy">📋</span>
+            </div>
+            <br><span class="sched-tag tag-shop">쇼핑</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon food">🍽️</div>
+          <div class="sched-body">
+            <div class="sched-time">18:30–20:00</div>
+            <div class="sched-title">저녁식사 · 야시장 구경</div>
+            <span class="sched-tag tag-food">식사</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched">
+        <div class="sched-top">
+          <div class="sched-icon hotel">🏨</div>
+          <div class="sched-body">
+            <div class="sched-time">20:00~</div>
+            <div class="sched-title">호텔 휴식</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      석림·구향동굴을 이미 방문했으므로 루디옌은 선택사항. 이 날은 쇼핑과 휴식에 충분한 시간을 배분.
     </div>
 
     <div class="section-divider"></div>
@@ -2022,7 +2208,7 @@ body.light .notice-box b{color:#b45309}
     <h2>꿀팁 · 예약 · 체크리스트</h2>
 
     <div class="tip-section">
-      <h3>🏨 숙소 예약 확정 (윈난 9박)</h3>
+      <h3>🏨 숙소 예약 확정 (윈난 8박)</h3>
 
       <div class="accom-card">
         <div class="accom-status">예약 확정</div>
@@ -2083,33 +2269,31 @@ body.light .notice-box b{color:#b45309}
 
       <div class="accom-card">
         <div class="accom-status">예약 확정</div>
-        <div class="accom-name">화룽 디자이너 홈스테이</div>
-        <div class="accom-dates">11/14 (토) 14:00 — 11/16 (월) 12:00 · 2박</div>
-        <div class="accom-room">윈시 180° 파노라마 더블 침대 2개룸<br><span style="font-size:11px">퀸침대 1개 + 더블 1개 · 50~60㎡ · 11~20층 · 레이크뷰 · 흡연가능 · 성인 3명</span></div>
-        <div class="accom-amenities">초대형 프렌치 윈도우 · 프로젝션 · 공용 주차장 2곳 · EV 충전소 · 짐 보관 · 픽업/샌딩</div>
-        <div style="font-size:11px;color:#64748b;margin-bottom:4px">치차이윈난 디이청 4호 아파트동 1609호, 차이윈남로, 청궁구</div>
-        <div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 +86-15368863966 / +86-13313325686</div>
+        <div class="accom-name"><a href="https://www.trip.com/hotels/kunming-hotel-detail-133282864/shuangqi-garden-hotel/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(245,158,11,0.4);text-underline-offset:3px">솽시 가든 호텔 (쿤밍 남부 고속철도역)</a></div>
+        <div class="accom-dates">11/14 (토) — 11/15 (일) · 1박</div>
+        <div class="accom-room">춘청 중정형 패밀리 스위트룸<br><span style="font-size:11px">스마트홈 · 컴포트 침구 · 3룸 3욕실</span></div>
+        <div class="accom-amenities">짐 보관 · 모닝콜 · 공용 Wi-Fi</div>
         <div style="font-size:11px;color:#64748b;margin-bottom:4px">🍽️ 식사 불포함</div>
-        <div class="cn-name" onclick="copyText('花容设计师酒店(昆明南站七彩云南第壹城店)')" style="margin:4px 0 8px">
-          <span class="cn-text" style="font-size:12px">花容设计师酒店（昆明南站七彩云南第壹城店）</span>
+        <div class="cn-name" onclick="copyText('双喜花园酒店(昆明南部高铁站店)')" style="margin:4px 0 8px">
+          <span class="cn-text" style="font-size:12px">双喜花园酒店（昆明南部高铁站店）</span>
           <span class="cn-copy">📋</span>
         </div>
         <div class="accom-meta">
-          <span class="accom-price">₩99,784</span>
-          <span class="accom-booking">예약번호: 1400829148318171</span>
+          <span class="accom-price">₩61,234</span>
+          <span class="accom-booking">예약자: SUJI JEON</span>
         </div>
       </div>
 
       <div class="tip-card" style="text-align:center">
         <div class="tip-text" style="font-size:13px">
-          <b style="color:#34d399">윈난 9박 숙소 합계: ₩622,056</b><br>
-          <span style="font-size:11px;color:#64748b">예약자: SUJI JEON · 트립닷컴 예약 · 구이린/양숴 5박 미정</span>
+          <b style="color:#34d399">윈난 8박 + 구이린 2박 숙소 합계: ₩770,294</b><br>
+          <span style="font-size:11px;color:#64748b">예약자: SUJI JEON · 트립닷컴 예약 · 양숴 3박 + 구이린 1박 미정</span>
         </div>
       </div>
 
       <div class="tip-card">
         <div class="tip-text" style="font-size:12px;color:#64748b">
-          <b>미예약 구간:</b> 구이린 2박 (11/16~18) · 양숴 2박 (11/18~20) · 구이린 1박 (11/20~21)<br>
+          <b>미예약 구간:</b> 양숴 3박 (11/17~20) · 구이린 1박 (11/20~21)<br>
           <b>권역 참고:</b> 구이린 — 상비산·정양보행가 / 양숴 — 서가 도보 10~15분
         </div>
       </div>
@@ -2137,10 +2321,8 @@ body.light .notice-box b{color:#b45309}
         <div class="tip-text">3인 하루 전세차. "쿤밍 시내 숙소 픽업/샌딩 → 석림 → 구향 → 쿤밍 복귀", 쇼핑점 방문 없는 조건으로 예약. 기사 포함 여부·고속도로비·주차비·입장권 포함 여부를 예약 전에 확인</div>
       </div>
       <div class="tip-card">
-        <div class="tip-title">5. 고속열차 4구간</div>
-        <div class="tip-text">12306 현재 15일 전 예매. 목표:<br>
-          11/9편(쿤밍→다리) <b>10/26</b> · 11/11편(다리→리장) <b>10/28</b><br>
-          11/14편(리장→쿤밍) <b>10/31</b> · 11/16편(쿤밍→구이린) <b>11/02</b></div>
+        <div class="tip-title">5. 고속열차 4구간 ✅ 예약 완료</div>
+        <div class="tip-text">D8692 · C987 · C460 · G2938 — 3명 총 ₩530,400 (1인 ₩176,800)</div>
       </div>
       <div class="tip-card">
         <div class="tip-title">6. 위룽허 대나무뗏목 · 11/18</div>
@@ -2149,17 +2331,17 @@ body.light .notice-box b{color:#b45309}
     </div>
 
     <div class="tip-section">
-      <h3>🚄 열차 시간대</h3>
+      <h3>🚄 열차 확정 시간</h3>
       <div class="tip-card">
         <div class="tip-text" style="font-size:12px;line-height:2">
-          <b>11/09</b> 쿤밍남→다리 08:00대 출발 (2시간)<br>
-          <b>11/11</b> 다리→리장 08:00 전후 출발 (1.5~2시간)<br>
-          <b>11/14</b> 리장→쿤밍 14:00~15:00 출발 (약 4시간)<br>
-          <b>11/16</b> 쿤밍남→구이린서 <b>08:24 목표</b> G2938 (4.5시간)
+          <b>11/09</b> D8692 쿤밍→다리 09:35–11:44 (2h09m) · ₩94,399<br>
+          <b>11/11</b> C987 다리→리장 09:58–11:57 (1h59m) · ₩48,242<br>
+          <b>11/14</b> C460 리장→쿤밍남 16:52–21:24 (4h32m) · ₩130,719<br>
+          <b>11/15</b> G2938 쿤밍남→구이린서 08:24–12:52 (4h28m) · ₩257,040
         </div>
       </div>
       <div class="tip-card">
-        <div class="tip-text" style="font-size:11px">열차번호는 지금 고정하지 않습니다. 11월 실제 운행표 열리면 같은 시간대 직통편 우선. 4시간대 구간은 1등석도 고려.</div>
+        <div class="tip-text" style="font-size:11px">4구간 모두 예약 확정. 금액은 3명 기준. D8692는 昆明站(쿤밍역) 출발, 나머지는 昆明南站(쿤밍남역).</div>
       </div>
     </div>
 
@@ -2268,7 +2450,7 @@ body.light .notice-box b{color:#b45309}
     </div>
 
     <div style="text-align:center;margin-top:30px;padding:20px;color:#64748b;font-size:13px">
-      <small style="opacity:0.5">Last updated: 2026. 09. 18</small><br>
+      <small style="opacity:0.5">Last updated: 2026. 10. 22</small><br>
       <small style="opacity:0.3;font-size:11px">2026 윈난·구이린·양숴 최종 여행 플랜</small>
     </div>
   </div>
@@ -2279,13 +2461,13 @@ body.light .notice-box b{color:#b45309}
   <div class="budget-page">
     <h2>💰 예상 경비</h2>
 
-    <p style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:6px"><b>A/B 1인당</b> · 14박 15일 · ¥1 ≈ ₩200</p>
+    <p style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:6px"><b>1인당</b> · 14박 15일 · ¥1 ≈ ₩200</p>
     <p style="text-align:center;font-size:11px;color:#64748b;margin-bottom:18px">항공권: 확정가 · 나머지: 추정</p>
 
     <table class="budget-table" id="budgetTableAB">
       <tr><td>✈️ 항공권</td><td>확정 (왕복)</td><td>₩585,200</td></tr>
-      <tr><td>🏨 숙소</td><td>윈난 9박 확정 + 구이린 5박 추정</td><td>₩416,000</td></tr>
-      <tr><td>🚄 고속열차</td><td>4구간 ¥863</td><td>₩173,000</td></tr>
+      <tr><td>🏨 숙소</td><td>윈난 8박 + 구이린 2박 확정 + 4박 추정</td><td>₩403,000</td></tr>
+      <tr><td>🚄 고속열차</td><td>4구간 확정</td><td>₩176,800</td></tr>
       <tr><td>🎟️ 입장료</td><td>석림·설산·크루즈 등</td><td>₩257,000</td></tr>
       <tr><td>🍽️ 식비</td><td>¥100/일 × 15일</td><td>₩300,000</td></tr>
       <tr><td>🚗 교통</td><td>DiDi·버스·전세차</td><td>₩100,000</td></tr>
@@ -2293,24 +2475,7 @@ body.light .notice-box b{color:#b45309}
       <tr><td>📱 통신</td><td>유심/eSIM</td><td>₩20,000</td></tr>
       <tr><td>🛡️ 보험</td><td>여행자보험</td><td>₩15,000</td></tr>
       <tr><td>🛍️ 기타</td><td>쇼핑·간식</td><td>₩100,000</td></tr>
-      <tr class="total"><td>A/B 1인 합계</td><td></td><td id="totalAB">₩0</td></tr>
-    </table>
-
-    <div style="height:24px"></div>
-
-    <p style="text-align:center;font-size:13px;color:#94a3b8;margin-bottom:6px"><b>C 1인</b> · 8박 9일 · 참고용</p>
-
-    <table class="budget-table" id="budgetTableC">
-      <tr><td>✈️ 항공권</td><td>확정 (왕복)</td><td>₩637,900</td></tr>
-      <tr><td>🏨 숙소</td><td>윈난 8박 확정 (화룽 1박)</td><td>₩191,000</td></tr>
-      <tr><td>🚄 고속열차</td><td>3구간 ¥438</td><td>₩88,000</td></tr>
-      <tr><td>🎟️ 입장료</td><td>석림·설산 등 ¥595</td><td>₩119,000</td></tr>
-      <tr><td>🍽️ 식비</td><td>¥100/일 × 9일</td><td>₩180,000</td></tr>
-      <tr><td>🚗 교통</td><td>DiDi·전세차(÷3)</td><td>₩67,000</td></tr>
-      <tr><td>📱 통신</td><td>유심/eSIM</td><td>₩20,000</td></tr>
-      <tr><td>🛡️ 보험</td><td>여행자보험</td><td>₩15,000</td></tr>
-      <tr><td>🛍️ 기타</td><td></td><td>₩60,000</td></tr>
-      <tr class="total"><td>C 합계</td><td></td><td id="totalC">₩0</td></tr>
+      <tr class="total"><td>1인 합계</td><td></td><td id="totalAB">₩0</td></tr>
     </table>
 
     <div class="budget-note">
@@ -2330,10 +2495,10 @@ body.light .notice-box b{color:#b45309}
     </div>
 
     <div class="budget-note" style="margin-top:8px">
-      💡 <b>숙소 확정 내역 (총 ₩622,056)</b><br>
-      · Yeshijie 2박 ₩118,420 · Sheyu 2박 ₩204,372 · Yidou 3박 ₩199,480 · 화룽 2박 ₩99,784<br>
-      · <b>A/B 1인:</b> 윈난 9박 ₩216,000 (화룽 2박째 2인 분할) + 구이린 5박 ₩200,000 추정<br>
-      · <b>C 1인:</b> 윈난 8박 ₩191,000 (화룽 1박만, 3인 분할)
+      💡 <b>숙소 확정 내역 (총 ₩770,294)</b><br>
+      · Yeshijie 2박 ₩118,420 · Sheyu 2박 ₩204,372 · Yidou 3박 ₩199,480 · 솽시 가든 1박 ₩61,234<br>
+      · 유니버설 구이린 2박 ₩186,788 (프리미어 스위트 · 조식 포함)<br>
+      · <b>1인:</b> 10박 확정 (₩256,765) + 양숴 3박·구이린 1박 추정 — 3인 균등 분할
     </div>
 
     <div style="text-align:center;margin-top:32px;padding:20px;color:#64748b;font-size:12px">
@@ -2490,22 +2655,25 @@ function initMaps() {
     { ll: [26.865, 100.225], name: '🏨 Yidou Hotel', cn: '一兜酒店', hotel: true }
   ]);
 
-  // Guilin
-  // Day 8-9: 이동+분리
-  makeMap('map-split', [25.5, 101.8], 7, [
+  // Day 8-9: 이동 · 구이린
+  makeMap('map-split', [25.5, 105.0], 6, [
     { ll: [26.8894, 100.2272], name: '흑룡담', cn: '黑龙潭公园' },
     { ll: [26.8721, 100.2260], name: '리장역', cn: '丽江站' },
-    { ll: [25.1019, 102.9292], name: '쿤밍 공항', cn: '昆明长水国际机场' },
     { ll: [24.9186, 102.7583], name: '쿤밍남역', cn: '昆明南站' },
-    { ll: [25.02, 102.76], name: '두난 꽃시장', cn: '斗南花卉市场' },
-    { ll: [24.96, 102.68], name: '뎬츠', cn: '滇池' },
-    { ll: [24.916, 102.755], name: '🏨 화룽 디자이너 홈스테이', cn: '花容设计师酒店', hotel: true }
+    { ll: [24.916, 102.755], name: '🏨 솽시 가든', cn: '双喜花园酒店', hotel: true },
+    { ll: [25.31, 110.17], name: '구이린서역', cn: '桂林西站' }
   ]);
 
-  makeMap('map-guilin', [25.3, 110.3], 12, [
+  // Guilin
+  makeMap('map-guilin', [25.28, 110.30], 12, [
     { ll: [25.26, 110.30], name: '상비산', cn: '象鼻山' },
     { ll: [25.28, 110.30], name: '동서항', cn: '东西巷' },
-    { ll: [25.35, 110.30], name: '죽강부두', cn: '竹江码头' }
+    { ll: [25.35, 110.30], name: '죽강부두', cn: '竹江码头' },
+    { ll: [25.2638, 110.2912], name: '일월쌍탑', cn: '日月双塔' },
+    { ll: [25.2636, 110.2905], name: '산후호', cn: '杉湖' },
+    { ll: [25.29, 110.32], name: '칠성공원', cn: '七星公园' },
+    { ll: [25.32, 110.22], name: '루디옌', cn: '芦笛岩' },
+    { ll: [25.28, 110.296], name: '정양보행가', cn: '正阳步行街' }
   ]);
 
   // Yangshuo
@@ -2545,7 +2713,6 @@ function calcBudget(tableId, totalId) {
   if (el) el.textContent = '₩' + sum.toLocaleString();
 }
 calcBudget('budgetTableAB', 'totalAB');
-calcBudget('budgetTableC', 'totalC');
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initMaps);
